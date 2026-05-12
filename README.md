@@ -202,7 +202,7 @@ If you want to capture or interpret the output of `env_logger` programmatically 
 
 ```kotlin
 dependencies {
-    implementation("io.github.kotlinmania:env-logger-kotlin:0.1.0-SNAPSHOT")
+    implementation("io.github.kotlinmania:env-logger-kotlin:0.1.0")
 }
 ```
 
