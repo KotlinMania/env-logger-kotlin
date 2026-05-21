@@ -13,10 +13,10 @@ import io.github.kotlinmania.envlogger.PipeSink
  */
 public sealed class Target {
     /** Logs will be sent to standard output. */
-    public data object Stdout : Target()
+    public object Stdout : Target()
 
     /** Logs will be sent to standard error. */
-    public data object Stderr : Target()
+    public object Stderr : Target()
 
     /** Logs will be sent to a custom pipe. */
     public class Pipe(public val sink: PipeSink) : Target()

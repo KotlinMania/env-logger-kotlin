@@ -17,12 +17,12 @@ name: "CodeQL Advanced"
 # for that language:
 #
 #   1. JDK + Gradle setup (the other two languages need no toolchain).
-#   2. A `./gradlew compileAndroidMain compileKotlinJs compileKotlinWasmJs`
-#      invocation under the CodeQL build tracer.
+#   2. A `./gradlew setupAndroidSdk compileAndroidMain compileKotlinJs
+#      compileKotlinWasmJs` invocation under the CodeQL build tracer.
 #
-# This is a strict-KMP project with no JVM target, so the autobuild
-# default for java-kotlin (`./gradlew testClasses`) has no task to run
-# and `build-mode: none` extracts nothing. The
+# This is a strict-KMP project, so the autobuild default for java-kotlin
+# (`./gradlew testClasses`) has no Java-style task to run and `build-mode:
+# none` extracts nothing. The
 # `com.android.kotlin.multiplatform.library` plugin, however, runs the
 # JVM `kotlinc` for the android target and emits real `.class` files
 # under `build/classes/kotlin/android/main` -- exactly what the
@@ -107,6 +107,7 @@ jobs:
         if: matrix.build-mode == 'manual'
         run: |
           ./gradlew \
+            setupAndroidSdk \
             compileAndroidMain \
             compileKotlinJs \
             compileKotlinWasmJs \
