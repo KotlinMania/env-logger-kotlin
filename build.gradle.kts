@@ -215,7 +215,11 @@ kotlin {
         }
     }
     iosX64 {
-        binaries.framework { baseName = "EnvLogger"; xcf.add(this) }
+        binaries.framework {
+            baseName = "EnvLogger"
+            isStatic = true
+            xcf.add(this)
+        }
     }
 
     tvosArm64 {
