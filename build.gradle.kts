@@ -208,7 +208,11 @@ kotlin {
         binaries.framework { baseName = "EnvLogger"; xcf.add(this) }
     }
     iosSimulatorArm64 {
-        binaries.framework { baseName = "EnvLogger"; xcf.add(this) }
+        binaries.framework {
+            baseName = "EnvLogger"
+            isStatic = true
+            xcf.add(this)
+        }
     }
     iosX64 {
         binaries.framework { baseName = "EnvLogger"; xcf.add(this) }
