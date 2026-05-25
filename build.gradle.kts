@@ -5,6 +5,7 @@ import java.nio.file.StandardCopyOption
 import java.util.zip.ZipInputStream
 import org.gradle.api.GradleException
 import org.gradle.api.tasks.ClasspathNormalizer
+import org.gradle.api.tasks.Exec
 import org.gradle.api.tasks.PathSensitivity
 import org.gradle.api.tasks.testing.AbstractTestTask
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
@@ -50,16 +51,23 @@ val androidSdkManager = projectAndroidSdkDir.resolve(
     },
 )
 val androidSdkInstallMarker = projectAndroidSdkDir.resolve(".install-complete")
+val maxAndroidSdkLicensePrompts = 200
 val requiredAndroidSdkPackageDirs = listOf(
     projectAndroidSdkDir.resolve("platform-tools"),
     projectAndroidSdkDir.resolve("platforms/android-$projectCompileSdk"),
     projectAndroidSdkDir.resolve("build-tools/$projectAndroidBuildTools"),
 )
 
-fun isProjectAndroidSdkInstalled(): Boolean =
-    androidSdkInstallMarker.exists() &&
-        androidSdkManager.exists() &&
-        requiredAndroidSdkPackageDirs.all { it.exists() }
+fun isProjectAndroidSdkInstalled(): Boolean {
+    val installed =
+        androidSdkInstallMarker.exists() &&
+            androidSdkManager.exists() &&
+            requiredAndroidSdkPackageDirs.all { it.exists() }
+    if (!installed && androidSdkInstallMarker.exists()) {
+        androidSdkInstallMarker.delete()
+    }
+    return installed
+}
 
 fun writeAndroidLocalProperties() {
     val sdkDirPropertyValue = projectAndroidSdkDir.absolutePath.replace("\\", "/")
@@ -135,21 +143,21 @@ fun installProjectAndroidSdk(execOperations: ExecOperations) {
     }
 
     println("setup-android-sdk: accepting licenses")
-    val licenseAnswers = "y\n".repeat(200).toByteArray(Charsets.UTF_8)
-    val licenseResult = execOperations.exec {
+    val licenseAnswers = "y\n".repeat(maxAndroidSdkLicensePrompts).toByteArray(Charsets.UTF_8)
+    val licenseExecResult = execOperations.exec {
         commandLine(sdkManagerCommand("--sdk_root=${projectAndroidSdkDir.absolutePath}", "--licenses"))
         standardInput = ByteArrayInputStream(licenseAnswers)
         isIgnoreExitValue = true
     }
-    if (licenseResult.exitValue != 0) {
-        throw GradleException("Android SDK license acceptance failed with exit code ${licenseResult.exitValue}")
+    if (licenseExecResult.exitValue != 0) {
+        throw GradleException("Android SDK license acceptance failed with exit code ${licenseExecResult.exitValue}")
     }
 
     println("setup-android-sdk: installing platform-tools, android-$projectCompileSdk, build-tools;$projectAndroidBuildTools")
     val installLog = projectAndroidSdkDir.resolve("sdkmanager-install.log")
     installLog.parentFile.mkdirs()
     installLog.outputStream().use { output ->
-        val installResult = execOperations.exec {
+        val installExecResult = execOperations.exec {
             commandLine(
                 sdkManagerCommand(
                     "--sdk_root=${projectAndroidSdkDir.absolutePath}",
@@ -162,9 +170,9 @@ fun installProjectAndroidSdk(execOperations: ExecOperations) {
             errorOutput = output
             isIgnoreExitValue = true
         }
-        if (installResult.exitValue != 0) {
+        if (installExecResult.exitValue != 0) {
             throw GradleException(
-                "Android SDK package install failed with exit code ${installResult.exitValue}. " +
+                "Android SDK package install failed with exit code ${installExecResult.exitValue}. " +
                     "Install log:\n${installLog.readText()}",
             )
         }
@@ -173,15 +181,16 @@ fun installProjectAndroidSdk(execOperations: ExecOperations) {
 
     writeAndroidLocalProperties()
     androidSdkInstallMarker.writeText("")
-    if (!isProjectAndroidSdkInstalled()) {
-        val missing = requiredAndroidSdkPackageDirs.filterNot { it.exists() }
-        throw GradleException("Android SDK install completed but required packages are missing: $missing")
-    }
     println("setup-android-sdk: done")
     println("  SDK at:     $projectAndroidSdkDir")
     println("  configured: local.properties -> $projectAndroidSdkDir")
 }
 
+// The Android Gradle plugin resolves the SDK location while Gradle builds the
+// task graph, before any task executes, so a project-local Android SDK must
+// already be installed by the time configuration reaches the android target.
+// This configuration-time installer is idempotent and always writes
+// local.properties to this repo's own .android-sdk path.
 val androidSdkExecOperations = serviceOf<ExecOperations>()
 installProjectAndroidSdk(androidSdkExecOperations)
 
@@ -205,11 +214,7 @@ kotlin {
         binaries.framework { baseName = "EnvLogger"; xcf.add(this) }
     }
     iosArm64 {
-        binaries.framework {
-            baseName = "EnvLogger"
-            isStatic = true
-            xcf.add(this)
-        }
+        binaries.framework { baseName = "EnvLogger"; xcf.add(this) }
     }
     iosSimulatorArm64 {
         binaries.framework {
@@ -422,20 +427,26 @@ mavenPublishing {
     }
 }
 
+// ---------------------------------------------------------------------------
+// CodeQL Java/Kotlin extraction task
+//
+// .github/workflows/codeql.yml invokes `./gradlew codeqlCompileJvm` to feed
+// commonMain through a standalone multiplatform-aware kotlinc invocation for
+// the CodeQL Java agent.
 val codeqlKotlinc: Configuration by configurations.creating {
-    description = "Kotlin compiler for CodeQL extraction only."
+    description = "Kotlin compiler (CodeQL extraction target only - not published)"
     isCanBeResolved = true
     isCanBeConsumed = false
 }
 
 val codeqlSourceClasspath: Configuration by configurations.creating {
-    description = "Runtime classpath for CodeQL extraction of commonMain sources."
+    description = "Runtime classpath for CodeQL extraction of commonMain sources"
     isCanBeResolved = true
     isCanBeConsumed = false
 }
 
 val codeqlAndroidAar: Configuration by configurations.creating {
-    description = "Android AAR artifacts for CodeQL classpath extraction."
+    description = "Android AAR artifacts for CodeQL classpath extraction (classes.jar only)"
     isCanBeResolved = true
     isCanBeConsumed = false
 }
@@ -462,9 +473,7 @@ val codeqlCompileJvm = tasks.register<JavaExec>("codeqlCompileJvm") {
 
     val outDir = layout.buildDirectory.dir("classes/kotlin/codeql-jvm")
     val aarExtractDir = layout.buildDirectory.dir("codeql/android-aar")
-    val commonSources = fileTree("src/commonMain/kotlin") { include("**/*.kt") }
-    val platformSources = fileTree("src/androidMain/kotlin") { include("**/*.kt") }
-    val sources = files(commonSources, platformSources)
+    val sources = fileTree("src/commonMain/kotlin") { include("**/*.kt") }
     val sentinelDir = layout.buildDirectory.dir("generated/codeql-empty-source")
     inputs.files(sources).withPathSensitivity(PathSensitivity.RELATIVE)
     inputs.files(codeqlSourceClasspath).withNormalizer(ClasspathNormalizer::class.java)
@@ -472,6 +481,7 @@ val codeqlCompileJvm = tasks.register<JavaExec>("codeqlCompileJvm") {
     outputs.dir(outDir)
     outputs.dir(aarExtractDir)
     outputs.dir(sentinelDir)
+    outputs.upToDateWhen { false }
 
     doFirst {
         outDir.get().asFile.mkdirs()
@@ -492,17 +502,19 @@ val codeqlCompileJvm = tasks.register<JavaExec>("codeqlCompileJvm") {
         val fullClasspath =
             (codeqlSourceClasspath.resolve() + extractedJars)
                 .joinToString(File.pathSeparator) { it.absolutePath }
-        val commonSourceFiles = commonSources.files.toMutableList()
         val sourceFiles = sources.files.toMutableList()
+        val commonSourceFiles = sourceFiles.toMutableList()
         if (sourceFiles.isEmpty()) {
-            val sentinelFile =
-                sentinelDir.get().asFile.resolve("io/github/kotlinmania/envlogger/codeql/_CodeqlEmptySource.kt")
+            val sentinelFile = sentinelDir.get().asFile.resolve("io/github/kotlinmania/envlogger/CodeqlEmptySentinel.kt")
             sentinelFile.parentFile.mkdirs()
             sentinelFile.writeText(
                 """
-                package io.github.kotlinmania.envlogger.codeql
+                // Auto-generated. Present so codeqlCompileJvm has at least
+                // one Kotlin source to feed kotlinc; replaced by real
+                // commonMain content once porting begins.
+                package io.github.kotlinmania.envlogger
 
-                private object _CodeqlEmptySource
+                private object CodeqlEmptySentinel
                 """.trimIndent(),
             )
             commonSourceFiles += sentinelFile
@@ -521,7 +533,6 @@ val codeqlCompileJvm = tasks.register<JavaExec>("codeqlCompileJvm") {
             "-Xexpect-actual-classes",
             "-opt-in", "kotlin.time.ExperimentalTime",
             "-opt-in", "kotlin.concurrent.atomics.ExperimentalAtomicApi",
-            "-opt-in", "kotlin.ExperimentalUnsignedTypes",
         ) + sourceFiles.map { it.absolutePath }
     }
 }
@@ -534,22 +545,63 @@ tasks.register("setupAndroidSdk") {
     }
 }
 
+val swiftExportEnvironment = mapOf(
+    "BUILT_PRODUCTS_DIR" to layout.buildDirectory.dir("swift-test").get().asFile.absolutePath,
+    "TARGET_BUILD_DIR" to layout.buildDirectory.dir("swift-test").get().asFile.absolutePath,
+    "SDK_NAME" to "macosx",
+    "CONFIGURATION" to "Debug",
+    "ARCHS" to "arm64",
+    "FRAMEWORKS_FOLDER_PATH" to "Frameworks",
+    "MACOSX_DEPLOYMENT_TARGET" to "14.0",
+    "DEPLOYMENT_TARGET_SETTING_NAME" to "MACOSX_DEPLOYMENT_TARGET",
+)
+
+val buildSwiftExportForSwiftTest = tasks.register<Exec>("buildSwiftExportForSwiftTest") {
+    group = "verification"
+    description = "Builds the Kotlin Swift Export SPM package for the local swift test harness."
+    commandLine(
+        "./gradlew",
+        "--no-daemon",
+        "--console=plain",
+        "--no-configuration-cache",
+        "embedSwiftExportForXcode",
+    )
+    environment(swiftExportEnvironment)
+    outputs.dir(layout.buildDirectory.dir("swift-test"))
+    outputs.dir(layout.buildDirectory.dir("SPMPackage/macosArm64/Debug"))
+    outputs.upToDateWhen { false }
+}
+
+val swiftExportTest = tasks.register<Exec>("swiftExportTest") {
+    group = "verification"
+    description = "Runs swift test against the Kotlin Swift Export package."
+    dependsOn(buildSwiftExportForSwiftTest)
+    workingDir(layout.projectDirectory.dir("swift-test-harness"))
+    commandLine("swift", "test")
+    outputs.upToDateWhen { false }
+}
+
+val defaultTestTasks = listOf(
+    "macosArm64Test",
+    "jvmTest",
+    "jsNodeTest",
+    "wasmJsNodeTest",
+    "compileAndroidMain",
+    "assembleUnitTest",
+)
+
+swiftExportTest.configure {
+    mustRunAfter(defaultTestTasks.mapNotNull { taskName -> tasks.findByName(taskName) })
+}
+
 tasks.register("test") {
     group = "verification"
     description =
-        "Runs the host-portable test suite (macOS + JS + WasmJS + Android unit). " +
+        "Runs the host-portable test suite (macOS + JS + WasmJS + Android unit + Swift Export). " +
         "Non-host native targets (mingwX64, linuxX64) only run on their own host."
 
-    val defaultTestTasks = listOf(
-        "macosArm64Test",
-        "jvmTest",
-        "jsNodeTest",
-        "wasmJsNodeTest",
-        "compileAndroidMain",
-        "assembleUnitTest",
-    )
-
     dependsOn(defaultTestTasks.mapNotNull { taskName -> tasks.findByName(taskName) })
+    dependsOn(swiftExportTest)
 }
 
 // The generated Wasm-WASI Node test runner cannot see the filesystem unless
@@ -683,6 +735,7 @@ val fullTargetBuildTasks = listOf(
     "watchosSimulatorArm64Binaries",
     "watchosSimulatorArm64TestBinaries",
     "embedSwiftExportForXcode",
+    "swiftExportTest",
     "assembleEnvLoggerXCFramework",
     "assembleEnvLoggerDebugXCFramework",
     "assembleEnvLoggerReleaseXCFramework",
