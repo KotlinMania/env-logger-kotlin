@@ -1,4 +1,3 @@
-// port-lint: ignore — Kotlin glue interface standing in for `dyn std::io::Write + Send + 'static`; KMP commonMain has no byte-sink analog.
 package io.github.kotlinmania.envlogger
 
 /**
