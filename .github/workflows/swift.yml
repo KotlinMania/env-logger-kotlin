@@ -9,7 +9,13 @@ permissions:
 jobs:
   build:
     name: Build and Test (Swift)
-    runs-on: macos-latest
+    # macos-26's default Xcode bundles the SDK that matches Kotlin/Native
+    # 2.3.x cached toolchain expectations. macos-latest lags one cycle and
+    # surfaces missing-symbol bridge failures (`_kCF{Bangla,Dangi,…}Calendar`
+    # and similar). Per SWIFT_EXPORT_ROLLOUT.md gap #7, pin macos-26 and
+    # never add maxim-lobanov/setup-xcode@v1 — that third-party action is
+    # not on the KotlinMania allowlist and triggers startup_failure.
+    runs-on: macos-26
     permissions:
       contents: read
     steps:

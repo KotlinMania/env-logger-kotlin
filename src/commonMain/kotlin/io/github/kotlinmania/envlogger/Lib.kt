@@ -293,7 +293,7 @@ package io.github.kotlinmania.envlogger
 // These are Rust-only lints and have no Kotlin equivalent.
 
 // Upstream declares the following modules:
-//   mod logger;     -> Logger.kt (pending: depends on env_filter-kotlin)
+//   mod logger;     -> Logger.kt, in the io.github.kotlinmania.envlogger package
 //   mod writer;     -> writer/Mod.kt and writer/{Target.kt, Buffer.kt}
 //   pub mod fmt;    -> fmt/Mod.kt and fmt/{Humantime.kt, Kv.kt}
 
@@ -302,12 +302,12 @@ package io.github.kotlinmania.envlogger
 //   pub use self::logger::*;
 //
 // Following the workspace `mod.rs` re-export rule, this file is kept as a
-// ledger and does NOT introduce typealiases. Callers should reference the
-// canonical homes directly:
-//   - Target          -> io.github.kotlinmania.envlogger.writer.Target
-//   - TimestampPrecision -> io.github.kotlinmania.envlogger.fmt.TimestampPrecision
-//   - WriteStyle      -> io.github.kotlinmania.envlogger.writer.WriteStyle
-//   - logger.*        -> io.github.kotlinmania.envlogger.* (once Logger.kt lands)
+// ledger and does NOT introduce typealiases. Callers reference the canonical
+// homes directly:
+//   - Target              -> io.github.kotlinmania.envlogger.writer.Target
+//   - TimestampPrecision  -> io.github.kotlinmania.envlogger.fmt.TimestampPrecision
+//   - WriteStyle          -> io.github.kotlinmania.envlogger.writer.WriteStyle
+//   - logger.*            -> io.github.kotlinmania.envlogger.* (Logger.kt)
 
 // Upstream attaches the README to a marker type so doctests pick it up:
 //   #[doc = include_str!("../README.md")]
