@@ -24,11 +24,15 @@ kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serializa
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "datetime" }
 collections-immutable = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable", version.ref = "collectionsImmutable" }
 
+anstyle-kotlin = { module = "io.github.kotlinmania:anstyle-kotlin", version = "0.1.5" }
+log-kotlin = { module = "io.github.kotlinmania:log-kotlin", version = "0.1.1" }
 [bundles]
 env-logger-commonMain = [
-  "kotlinx-coroutines-core",
-  "kotlinx-serialization-core",
-  "kotlinx-serialization-json",
-  "kotlinx-datetime",
-  "collections-immutable",
+    "kotlinx-coroutines-core",
+    "kotlinx-serialization-core",
+    "kotlinx-serialization-json",
+    "kotlinx-datetime",
+    "collections-immutable",
+    "anstyle-kotlin",
+    "log-kotlin",
 ]
