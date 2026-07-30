@@ -41,7 +41,9 @@ public enum class WriteStyle {
 /**
  * A terminal target with color awareness.
  */
-internal class Writer internal constructor(private val inner: BufferWriter) {
+internal class Writer internal constructor(
+    private val inner: BufferWriter,
+) {
     internal fun writeStyle(): WriteStyle = inner.writeStyle()
 
     internal fun buffer(): Buffer = inner.buffer()
@@ -112,16 +114,18 @@ internal class Builder internal constructor() {
         val currentTarget = target
         target = Target.default()
 
-        val targetPipeSink: PipeSink? = when (currentTarget) {
-            is Target.Pipe -> currentTarget.sink
-            else -> null
-        }
+        val targetPipeSink: PipeSink? =
+            when (currentTarget) {
+                is Target.Pipe -> currentTarget.sink
+                else -> null
+            }
 
-        val writer: BufferWriter = when (currentTarget) {
-            Target.Stdout -> BufferWriter.stdout(isTest, colorChoice)
-            Target.Stderr -> BufferWriter.stderr(isTest, colorChoice)
-            is Target.Pipe -> BufferWriter.pipe(targetPipeSink!!, colorChoice)
-        }
+        val writer: BufferWriter =
+            when (currentTarget) {
+                Target.Stdout -> BufferWriter.stdout(isTest, colorChoice)
+                Target.Stderr -> BufferWriter.stderr(isTest, colorChoice)
+                is Target.Pipe -> BufferWriter.pipe(targetPipeSink!!, colorChoice)
+            }
 
         return Writer(writer)
     }
@@ -135,9 +139,10 @@ internal class Builder internal constructor() {
     }
 }
 
-internal fun parseWriteStyleSpec(spec: String): WriteStyle = when (spec) {
-    "auto" -> WriteStyle.Auto
-    "always" -> WriteStyle.Always
-    "never" -> WriteStyle.Never
-    else -> WriteStyle.default()
-}
+internal fun parseWriteStyleSpec(spec: String): WriteStyle =
+    when (spec) {
+        "auto" -> WriteStyle.Auto
+        "always" -> WriteStyle.Always
+        "never" -> WriteStyle.Never
+        else -> WriteStyle.default()
+    }

@@ -49,7 +49,9 @@ public fun defaultKvFormat(formatter: Formatter, fields: Source) {
     fields.visit(DefaultVisitSource(formatter)).getOrThrow()
 }
 
-private class DefaultVisitSource(val formatter: Formatter) : VisitSource {
+private class DefaultVisitSource(
+    val formatter: Formatter,
+) : VisitSource {
     override fun visitPair(key: Key, value: Value): Result<Unit> {
         formatter.writeStr(" ${styleKey(key)}=$value")
         return Result.success(Unit)

@@ -19,7 +19,9 @@ public sealed class Target {
     public object Stderr : Target()
 
     /** Logs will be sent to a custom pipe. */
-    public class Pipe(public val sink: PipeSink) : Target()
+    public class Pipe(
+        public val sink: PipeSink,
+    ) : Target()
 
     /**
      * Mirrors the upstream `std::fmt::Debug` implementation. The Kotlin
@@ -27,11 +29,12 @@ public sealed class Target {
      * single [toString], so the lowercase tag is observable through any
      * formatter that asks for a string representation.
      */
-    override fun toString(): String = when (this) {
-        is Stdout -> "stdout"
-        is Stderr -> "stderr"
-        is Pipe -> "pipe"
-    }
+    override fun toString(): String =
+        when (this) {
+            is Stdout -> "stdout"
+            is Stderr -> "stderr"
+            is Pipe -> "pipe"
+        }
 
     public companion object {
         /** Returns the default [Target], which is [Stderr]. */

@@ -9,7 +9,6 @@ import io.github.kotlinmania.envlogger.writer.WriteStyle
 import io.github.kotlinmania.envlogger.writer.Writer
 import io.github.kotlinmania.log.Level
 import io.github.kotlinmania.log.Record
-import io.github.kotlinmania.log.kv.Source
 
 /**
  * Formatting for log records.
@@ -253,11 +252,12 @@ internal data class StyledValue<T : Any>(
      * Renders the value wrapped in the style's ANSI escape sequences. Equivalent
      * to upstream `impl<T: Display> Display for StyledValue<T>`.
      */
-    override fun toString(): String = buildString {
-        append(style.render())
-        append(value)
-        append(style.renderReset())
-    }
+    override fun toString(): String =
+        buildString {
+            append(style.render())
+            append(value)
+            append(style.renderReset())
+        }
 }
 
 /** Subtle styling for header punctuation (open/close brackets, etc.). */
@@ -278,11 +278,12 @@ public class ConfigurableFormat internal constructor(
 ) {
     /** Format the [Record] as configured for outputting. */
     public fun format(formatter: Formatter, record: Record) {
-        val fmt = ConfigurableFormatWriter(
-            format = this,
-            buf = formatter,
-            writtenHeaderValue = false,
-        )
+        val fmt =
+            ConfigurableFormatWriter(
+                format = this,
+                buf = formatter,
+                writtenHeaderValue = false,
+            )
         fmt.write(record)
     }
 
