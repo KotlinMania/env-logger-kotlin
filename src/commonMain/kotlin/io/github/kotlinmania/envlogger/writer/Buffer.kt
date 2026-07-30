@@ -75,7 +75,9 @@ private fun writeAllToCommonStdout(buf: ByteArray) {
     kotlin.io.print(buf.decodeToString())
 }
 
-internal class Buffer internal constructor(private val storage: MutableList<Byte>) {
+internal class Buffer internal constructor(
+    private val storage: MutableList<Byte>,
+) {
     internal fun clear() {
         storage.clear()
     }
@@ -129,18 +131,21 @@ internal sealed class WritableTarget {
     internal object PrintStderr : WritableTarget()
 
     /** Logs will be sent to a custom pipe. */
-    internal class Pipe(internal val sink: PipeSink) : WritableTarget()
+    internal class Pipe(
+        internal val sink: PipeSink,
+    ) : WritableTarget()
 
     /**
      * Mirrors the upstream `std::fmt::Debug` implementation; the two
      * `Stdout` variants and the two `Stderr` variants share their string
      * names because they share their output destination.
      */
-    override fun toString(): String = when (this) {
-        WriteStdout -> "stdout"
-        PrintStdout -> "stdout"
-        WriteStderr -> "stderr"
-        PrintStderr -> "stderr"
-        is Pipe -> "pipe"
-    }
+    override fun toString(): String =
+        when (this) {
+            WriteStdout -> "stdout"
+            PrintStdout -> "stdout"
+            WriteStderr -> "stderr"
+            PrintStderr -> "stderr"
+            is Pipe -> "pipe"
+        }
 }

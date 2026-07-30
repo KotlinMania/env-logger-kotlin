@@ -11,11 +11,12 @@ import kotlin.test.assertSame
 class ModTest {
     @Test
     fun parseWriteStyleValid() {
-        val inputs = listOf(
-            "auto" to WriteStyle.Auto,
-            "always" to WriteStyle.Always,
-            "never" to WriteStyle.Never,
-        )
+        val inputs =
+            listOf(
+                "auto" to WriteStyle.Auto,
+                "always" to WriteStyle.Always,
+                "never" to WriteStyle.Never,
+            )
 
         for ((input, expected) in inputs) {
             assertEquals(expected, parseWriteStyleSpec(input))
@@ -48,27 +49,33 @@ class ModTest {
 
     @Test
     fun builderPreservesExplicitNever() {
-        val writer = Builder.new()
-            .writeStyle(WriteStyle.Never)
-            .build()
+        val writer =
+            Builder
+                .new()
+                .writeStyle(WriteStyle.Never)
+                .build()
 
         assertSame(WriteStyle.Never, writer.writeStyle())
     }
 
     @Test
     fun builderPreservesExplicitAlways() {
-        val writer = Builder.new()
-            .writeStyle(WriteStyle.Always)
-            .build()
+        val writer =
+            Builder
+                .new()
+                .writeStyle(WriteStyle.Always)
+                .build()
 
         assertSame(WriteStyle.Always, writer.writeStyle())
     }
 
     @Test
     fun parseWriteStyleViaBuilder() {
-        val writer = Builder.new()
-            .parseWriteStyle("always")
-            .build()
+        val writer =
+            Builder
+                .new()
+                .parseWriteStyle("always")
+                .build()
 
         assertSame(WriteStyle.Always, writer.writeStyle())
     }
@@ -85,10 +92,12 @@ class ModTest {
     @Test
     fun pipeTargetRoutesBytesToCallerSink() {
         val sink = RecordingSink()
-        val writer = Builder.new()
-            .target(Target.Pipe(sink))
-            .writeStyle(WriteStyle.Never)
-            .build()
+        val writer =
+            Builder
+                .new()
+                .target(Target.Pipe(sink))
+                .writeStyle(WriteStyle.Never)
+                .build()
 
         val buffer = writer.buffer()
         val payload = "hello".encodeToByteArray()
@@ -102,10 +111,12 @@ class ModTest {
 
     @Test
     fun bufferClearAndAsBytesRoundTrip() {
-        val writer = Builder.new()
-            .target(Target.Pipe(RecordingSink()))
-            .writeStyle(WriteStyle.Never)
-            .build()
+        val writer =
+            Builder
+                .new()
+                .target(Target.Pipe(RecordingSink()))
+                .writeStyle(WriteStyle.Never)
+                .build()
 
         val buffer = writer.buffer()
         buffer.write("alpha".encodeToByteArray())
@@ -117,10 +128,12 @@ class ModTest {
 
     @Test
     fun bufferToStringMatchesUtf8Decoding() {
-        val writer = Builder.new()
-            .target(Target.Pipe(RecordingSink()))
-            .writeStyle(WriteStyle.Never)
-            .build()
+        val writer =
+            Builder
+                .new()
+                .target(Target.Pipe(RecordingSink()))
+                .writeStyle(WriteStyle.Never)
+                .build()
 
         val buffer = writer.buffer()
         buffer.write("café".encodeToByteArray())

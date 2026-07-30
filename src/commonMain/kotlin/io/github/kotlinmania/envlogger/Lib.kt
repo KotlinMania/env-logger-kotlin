@@ -314,3 +314,9 @@ package io.github.kotlinmania.envlogger
 //   #[cfg(doctest)]
 //   pub struct ReadmeDoctests;
 // Kotlin has no doctest equivalent, so the marker type is intentionally omitted.
+
+/**
+ * Internal sentinel ensuring this file is not empty for tooling purposes.
+ * The real crate-level API surface is spread across Logger.kt, writer/, and fmt/.
+ */
+internal object Lib

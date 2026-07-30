@@ -1,10 +1,10 @@
 // port-lint: source src/fmt/humantime.rs
 package io.github.kotlinmania.envlogger.fmt
 
-import kotlin.time.Clock
-import kotlin.time.Instant
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
+import kotlin.time.Clock
+import kotlin.time.Instant
 
 /**
  * Get a [Timestamp] for the current date and time in UTC.
@@ -96,7 +96,11 @@ public class Timestamp internal constructor(
     override fun toString(): String {
         val ldt = time.toLocalDateTime(TimeZone.UTC)
         val year = ldt.year.toString().padStart(4, '0')
-        val month = ldt.month.ordinal.plus(1).toString().padStart(2, '0')
+        val month =
+            ldt.month.ordinal
+                .plus(1)
+                .toString()
+                .padStart(2, '0')
         val day = ldt.day.toString().padStart(2, '0')
         val hour = ldt.hour.toString().padStart(2, '0')
         val minute = ldt.minute.toString().padStart(2, '0')
