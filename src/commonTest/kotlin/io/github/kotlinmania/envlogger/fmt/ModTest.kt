@@ -1,7 +1,6 @@
 // port-lint: tests fmt/mod.rs
 package io.github.kotlinmania.envlogger.fmt
 
-import io.github.kotlinmania.envlogger.writer.WriteStyle
 import io.github.kotlinmania.log.Arguments
 import io.github.kotlinmania.log.Level
 import io.github.kotlinmania.log.Record
@@ -10,13 +9,6 @@ import io.github.kotlinmania.log.kv.Source
 import io.github.kotlinmania.log.kv.toValue
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import io.github.kotlinmania.envlogger.writer.Builder as WriterBuilder
-
-private fun writeRecord(record: Record, fmt: ConfigurableFormatWriter): String {
-    val buf = fmt.buf.buf
-    fmt.write(record)
-    return buf.asBytes().decodeToString()
-}
 
 private fun writeTarget(target: String, fmt: ConfigurableFormatWriter): String =
     writeRecord(
@@ -33,11 +25,6 @@ private fun writeTarget(target: String, fmt: ConfigurableFormatWriter): String =
     )
 
 private fun write(fmt: ConfigurableFormatWriter): String = writeTarget("", fmt)
-
-private fun formatter(): Formatter {
-    val writer = WriterBuilder.new().writeStyle(WriteStyle.Never).build()
-    return Formatter(writer)
-}
 
 private fun kvSource(vararg pairs: Pair<String, UInt>): Source =
     Source { visitor ->

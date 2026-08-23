@@ -88,11 +88,14 @@ internal class Buffer internal constructor(
     }
 
     /**
-     * Mirrors the upstream `std::fmt::Debug` implementation: the buffer
-     * renders as the lossy UTF-8 decoding of its bytes.
+     * Formats buffer as string representation.
      */
+    public fun fmt(): String = toString()
+
     override fun toString(): String = asBytes().decodeToString()
 }
+
+internal fun adapt(buf: ByteArray, writeStyle: WriteStyle): ByteArray = buf
 
 /**
  * Log target, either `stdout`, `stderr` or a custom pipe.

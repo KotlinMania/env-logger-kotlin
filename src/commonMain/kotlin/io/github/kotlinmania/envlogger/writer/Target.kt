@@ -31,6 +31,11 @@ public sealed class Target {
             is Pipe -> "pipe"
         }
 
+    /**
+     * Formats target for display and debug representations.
+     */
+    public fun fmt(): String = toString()
+
     public companion object {
         /** Returns the default [Target], which is [Stderr]. */
         public fun default(): Target = Stderr

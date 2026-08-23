@@ -109,10 +109,17 @@ public class Timestamp internal constructor(
             }
         return "$year-$month-${day}T$hour:$minute:$second${fractional}Z"
     }
+
+    /**
+     * Formats timestamp representation.
+     */
+    public fun fmt(): String = toString()
 }
 
 internal class TimestampValue(
     internal val timestamp: Timestamp,
 ) {
+    internal fun fmt(): String = timestamp.toString()
+
     override fun toString(): String = timestamp.toString()
 }
