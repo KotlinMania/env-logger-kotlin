@@ -171,6 +171,70 @@ fun registerCodeqlCompileTask(
                     .joinToString(File.pathSeparator) { it.absolutePath }
             val commonSourceFiles = commonSources.files.toMutableList()
             val sourceFiles = sources.files.toMutableList()
+
+            val stubAnstyle = dummySourceDir.get().file("ai/solace/tui/anstyle/AnstyleStub.kt").asFile
+            stubAnstyle.parentFile.mkdirs()
+            stubAnstyle.writeText(
+                "package ai.solace.tui.anstyle\n\n" +
+                    "public class Style {\n" +
+                    "    public fun render(): String = \"\"\n" +
+                    "    public fun renderReset(): String = \"\"\n" +
+                    "    public fun effects(effects: Effects): Style = this\n" +
+                    "}\n\n" +
+                    "public class Effects {\n" +
+                    "    public companion object {\n" +
+                    "        public val PLAIN: Effects = Effects()\n" +
+                    "        public val BOLD: Effects = Effects()\n" +
+                    "        public val DIMMED: Effects = Effects()\n" +
+                    "        public val ITALIC: Effects = Effects()\n" +
+                    "        public val UNDERLINE: Effects = Effects()\n" +
+                    "        public val INVERT: Effects = Effects()\n" +
+                    "    }\n" +
+                    "}\n\n" +
+                    "public enum class AnsiColor {\n" +
+                    "    Black, Red, Green, Yellow, Blue, Magenta, Cyan, White, BrightBlack;\n" +
+                    "    public fun onDefault(): Style = Style()\n" +
+                    "}\n",
+            )
+            commonSourceFiles.add(stubAnstyle)
+            sourceFiles.add(stubAnstyle)
+
+            val stubLog = dummySourceDir.get().file("io/github/kotlinmania/log/LogStub.kt").asFile
+            stubLog.parentFile.mkdirs()
+            stubLog.writeText(
+                "package io.github.kotlinmania.log\n\n" +
+                    "public enum class Level {\n" +
+                    "    Error, Warn, Info, Debug, Trace\n" +
+                    "}\n\n" +
+                    "public interface Record {\n" +
+                    "    public fun level(): Level\n" +
+                    "    public fun modulePath(): String?\n" +
+                    "    public fun file(): String?\n" +
+                    "    public fun line(): Int?\n" +
+                    "    public fun target(): String\n" +
+                    "    public fun args(): Any\n" +
+                    "    public fun keyValues(): io.github.kotlinmania.log.kv.Source\n" +
+                    "}\n",
+            )
+            commonSourceFiles.add(stubLog)
+            sourceFiles.add(stubLog)
+
+            val stubLogKv = dummySourceDir.get().file("io/github/kotlinmania/log/kv/LogKvStub.kt").asFile
+            stubLogKv.parentFile.mkdirs()
+            stubLogKv.writeText(
+                "package io.github.kotlinmania.log.kv\n\n" +
+                    "public interface Source {\n" +
+                    "    public fun visit(visitor: VisitSource): Result<Unit> = Result.success(Unit)\n" +
+                    "}\n" +
+                    "public interface Key\n" +
+                    "public interface Value\n" +
+                    "public interface VisitSource {\n" +
+                    "    public fun visitPair(key: Key, value: Value): Result<Unit>\n" +
+                    "}\n",
+            )
+            commonSourceFiles.add(stubLogKv)
+            sourceFiles.add(stubLogKv)
+
             // If no real sources were found, use the dummy source generated in onlyIf.
             if (commonSourceFiles.isEmpty()) {
                 commonSourceFiles.add(dummySourceFile.get().asFile)
