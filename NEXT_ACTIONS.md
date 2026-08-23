@@ -6,8 +6,8 @@ Based on AST analysis, here are the concrete next steps.
 
 - **Files Present:** 7/8 (87.5%)
 - **Function parity:** 72/147 matched (target 110) — 49.0%
-- **Class/type parity:** 16/26 matched (target 30) — 61.5%
-- **Combined symbol parity:** 88/173 matched (target 140) — 50.9%
+- **Class/type parity:** 16/26 matched (target 31) — 61.5%
+- **Combined symbol parity:** 88/173 matched (target 141) — 50.9%
 - **Average inline-code cosine:** 0.00 (function body across 4 matched files)
 - **Average documentation cosine:** 0.80 (doc text across 4 matched files)
 - **Cheat-zeroed Files:** 7
@@ -130,7 +130,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Priority Score:** 10110.0
 - **Functions:** 0/0 matched
 - **Missing functions:** _none_
-- **Types:** 0/1 matched (target 0)
+- **Types:** 0/1 matched
 - **Missing types:** `ReadmeDoctests`
 - **Provenance warning:** port-lint provenance header matched only after fallback normalization: `src/lib.rs` vs expected `lib.rs`
 - **Proposed provenance header:** `// port-lint: source lib.rs` (current: `// port-lint: source src/lib.rs`)

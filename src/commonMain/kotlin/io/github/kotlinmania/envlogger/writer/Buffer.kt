@@ -1,4 +1,4 @@
-// port-lint: source src/writer/buffer.rs
+// port-lint: source writer/buffer.rs
 package io.github.kotlinmania.envlogger.writer
 
 import io.github.kotlinmania.envlogger.PipeSink

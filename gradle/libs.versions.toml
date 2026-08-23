@@ -8,6 +8,8 @@ androidKmp = "9.2.1"
 detekt = "1.23.8"
 ktlint = "14.2.0"
 kotlinxBenchmark = "0.4.17"
+anstyle = "0.1.5"
+log = "0.1.3"
 
 [plugins]
 kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
@@ -25,12 +27,16 @@ kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serializa
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "datetime" }
 collections-immutable = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable", version.ref = "collectionsImmutable" }
 kotlinx-benchmark-runtime = { module = "org.jetbrains.kotlinx:kotlinx-benchmark-runtime", version.ref = "kotlinxBenchmark" }
+anstyle = { module = "io.github.kotlinmania:anstyle-kotlin", version.ref = "anstyle" }
+log = { module = "io.github.kotlinmania:log-kotlin", version.ref = "log" }
 
 [bundles]
-envlogger-commonMain = [
+env-logger-commonMain = [
   "kotlinx-coroutines-core",
   "kotlinx-serialization-core",
   "kotlinx-serialization-json",
   "kotlinx-datetime",
   "collections-immutable",
+  "anstyle",
+  "log",
 ]
