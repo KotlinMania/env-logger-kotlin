@@ -57,16 +57,6 @@ import io.github.kotlinmania.log.Record
  * See <https://docs.rs/log/latest/log/#structured-logging>.
  */
 
-// The upstream `mod humantime` and `mod kv` declarations are translated to the
-// sibling Kotlin files [Humantime.kt] and [Kv.kt] in this package.
-
-// Upstream re-exports `pub use anstyle as style;`, `pub use self::humantime::Timestamp;`,
-// `pub use self::kv::*;`, `pub use crate::writer::Target;`, and
-// `pub use crate::writer::WriteStyle;`. The Kotlin port leaves these where they
-// live: `ai.solace.tui.anstyle.*` for [Style], the sibling files for [Timestamp]
-// and the kv helpers, and the writer package for [Target]/[WriteStyle]. The
-// CLAUDE.md re-export procedure forbids minting a central `typealias`.
-
 /**
  * Formatting precision of timestamps.
  *
@@ -74,9 +64,6 @@ import io.github.kotlinmania.log.Record
  * second (3 decimal digits), microseconds are millionth of a second (6 decimal
  * digits) and nanoseconds are billionth of a second (9 decimal digits).
  */
-// Upstream lifts `#[allow(clippy::exhaustive_enums)]` plus `Copy, Clone, Debug`
-// derives onto this enum. Kotlin enums are value types and provide a generated
-// toString(), so no explicit equivalents are needed.
 public enum class TimestampPrecision {
     /** Full second precision (0 decimal digits) */
     Seconds,
@@ -131,6 +118,14 @@ public class Formatter internal constructor(
         buf.clear()
     }
 
+    public companion object {
+        internal fun new(writer: Writer): Formatter = Formatter(writer)
+    }
+
+    internal fun writeRecord(record: Record) {
+        writeStr(record.args().toString())
+    }
+
     /**
      * Get the default [Style] for the given level.
      *
@@ -180,28 +175,18 @@ public class Formatter internal constructor(
 
 /**
  * Format function for serializing a [Record] into a [Formatter].
- *
- * The upstream Rust trait is `RecordFormat`. It is sealed at the crate level;
- * the Kotlin port keeps it `internal` for the same reason.
  */
 internal fun interface RecordFormat {
     fun format(formatter: Formatter, record: Record)
 }
 
 /**
- * Owned, type-erased record format. Upstream this is
- * `Box<dyn RecordFormat + Sync + Send>`; in the Kotlin port the boxing is
- * implicit so the alias is just [RecordFormat].
+ * Format function alias.
  */
 internal typealias FormatFn = RecordFormat
 
 /**
  * Adapts a [ConfigurableFormat] to the [RecordFormat] functional interface.
- *
- * Upstream Rust uses `impl RecordFormat for ConfigurableFormat`; in Kotlin
- * [ConfigurableFormat.format] already matches the [RecordFormat] shape, so the
- * adapter is implemented in the `Builder.build` path via this helper rather
- * than as a direct interface bridge.
  */
 private fun ConfigurableFormat.asRecordFormat(): RecordFormat =
     RecordFormat { formatter, record -> format(formatter, record) }
@@ -227,8 +212,6 @@ internal class Builder {
 
         val builtFormat = defaultFormat
         val builtCustom = customFormat
-        // Replace `self` with a fresh, marked-as-built builder, mirroring the
-        // upstream `mem::replace` swap.
         defaultFormat = ConfigurableFormat()
         customFormat = null
         built = true
@@ -236,10 +219,6 @@ internal class Builder {
         return builtCustom ?: builtFormat.asRecordFormat()
     }
 }
-
-// Upstream gates `SubtleStyle` and `StyledValue<T>` on `cfg(feature = "color")`.
-// The Kotlin port always carries [Style] from anstyle-kotlin, so the
-// `cfg(not(feature = "color"))` branch is dropped.
 
 /**
  * A value that can be printed using the given styles.
@@ -362,17 +341,8 @@ public class ConfigurableFormat internal constructor(
     }
 }
 
-// Upstream `impl RecordFormat for ConfigurableFormat` exposes the same
-// `format(formatter, record)` shape. In Kotlin, [ConfigurableFormat.format]
-// already matches the [RecordFormat] functional interface contract; a separate
-// adapter is unnecessary because callers can pass a method reference. The
-// upstream `impl Default for ConfigurableFormat` is encoded as the default
-// values on the primary constructor.
-
 /**
  * The default format.
- *
- * This format needs to work with any combination of crate features.
  */
 internal class ConfigurableFormatWriter(
     val format: ConfigurableFormat,
@@ -487,28 +457,37 @@ internal class ConfigurableFormatWriter(
             return
         }
 
-        // Wrapper that splits the rendered arguments on newlines and re-emits
-        // them with the configured indent prefix between chunks.
-        val rendered = record.args().toString().encodeToByteArray()
+        val wrapper = IndentWrapper(this, indentCount)
+        wrapper.write(record.args().toString().encodeToByteArray())
+    }
+
+    fun writeKv(record: Record) {
+        val kvFormat: KvFormatFn = this.format.kvFormat ?: ::defaultKvFormat
+        kvFormat(buf, record.keyValues())
+    }
+}
+
+internal class IndentWrapper(
+    internal val fmt: ConfigurableFormatWriter,
+    internal val indentCount: Int,
+) {
+    fun write(buf: ByteArray): Int {
+        val rendered = buf
         var first = true
         var start = 0
         var i = 0
         while (i <= rendered.size) {
             if (i == rendered.size || rendered[i] == '\n'.code.toByte()) {
                 if (!first) {
-                    buf.writeStr(format.suffix)
-                    buf.writeStr(" ".repeat(indentCount))
+                    fmt.buf.writeStr(fmt.format.suffix)
+                    fmt.buf.writeStr(" ".repeat(indentCount))
                 }
-                buf.writeAll(rendered.copyOfRange(start, i))
+                fmt.buf.writeAll(rendered.copyOfRange(start, i))
                 first = false
                 start = i + 1
             }
             i++
         }
-    }
-
-    fun writeKv(record: Record) {
-        val kvFormat: KvFormatFn = this.format.kvFormat ?: KvFormatFn(::defaultKvFormat)
-        kvFormat(buf, record.keyValues())
+        return buf.size
     }
 }

@@ -79,14 +79,11 @@ package io.github.kotlinmania.envlogger
  * them with underscores:
  *
  * ```console
- * $ RUST_LOG=my_app ./my-app
- * [2017-11-09T02:12:24Z DEBUG my_app] this is a debug message
- * [2017-11-09T02:12:24Z ERROR my_app] this is printed by default
- * [2017-11-09T02:12:24Z INFO my_app] the answer was: 12
+ * $ RUST_LOG=myapp ./my-app
+ * [2017-11-09T02:12:24Z DEBUG myapp] this is a debug message
+ * [2017-11-09T02:12:24Z ERROR myapp] this is printed by default
+ * [2017-11-09T02:12:24Z INFO myapp] the answer was: 12
  * ```
- *
- * This is because Rust modules and crates cannot contain hyphens
- * in their name, although `cargo` continues to accept them.
  *
  * See the documentation for the [log][log-crate-url] crate for more
  * information about its API.
@@ -120,7 +117,7 @@ package io.github.kotlinmania.envlogger
  * - `example`
  * - `example::test`
  * - `example::test::module::submodule`
- * - `examples::and_more_examples`
+ * - `examples::andMoreExamples`
  *
  * When providing the crate name or a module path, explicitly specifying the
  * log level is optional. If omitted, all logging for the item will be
@@ -138,7 +135,7 @@ package io.github.kotlinmania.envlogger
  * `debug`, `DEBUG`, and `dEbuG` all represent the same logging level. For
  * consistency, our convention is to use the lower case names. Where our docs
  * do use other forms, they do so in the context of specific examples, so you
- * won't be surprised if you see similar usage in the wild.
+ * will not be surprised if you see similar usage in the wild.
  *
  * Some examples of valid values of `RUST_LOG` are:
  *
@@ -149,7 +146,7 @@ package io.github.kotlinmania.envlogger
  * - `RUST_LOG=INFO` turns on all info logging (same as previous)
  * - `RUST_LOG=hello=debug` turns on debug logging for `hello`
  * - `RUST_LOG=hello=DEBUG` turns on debug logging for `hello` (same as previous)
- * - `RUST_LOG=hello,std::option` turns on `hello`, and std's option logging
+ * - `RUST_LOG=hello,std::option` turns on `hello`, and std option logging
  * - `RUST_LOG=error,hello=warn` turn on global error logging and also warn for `hello`
  * - `RUST_LOG=error,hello=off`  turn on global error logging, but turn off logging for `hello`
  * - `RUST_LOG=off` turns off all logging for the application
@@ -165,15 +162,15 @@ package io.github.kotlinmania.envlogger
  *
  * Some examples:
  *
- * * `hello/foo` turns on all logging for the 'hello' module where the log
- *   message includes 'foo'.
- * * `info/f.o` turns on all info logging where the log message includes 'foo',
- *   'f1o', 'fao', etc.
- * * `hello=debug/foo*foo` turns on debug logging for 'hello' where the log
- *   message includes 'foofoo' or 'fofoo' or 'fooooooofoo', etc.
+ * * `hello/foo` turns on all logging for the `hello` module where the log
+ *   message includes `foo`.
+ * * `info/f.o` turns on all info logging where the log message includes `foo`,
+ *   `f1o`, `fao`, etc.
+ * * `hello=debug/foo*foo` turns on debug logging for `hello` where the log
+ *   message includes `foofoo` or `fofoo` or `fooooooofoo`, etc.
  * * `error,hello=warn/[0-9]scopes` turn on global error logging and also
  *   warn for hello. In both cases the log message must include a single digit
- *   number followed by 'scopes'.
+ *   number followed by `scopes`.
  *
  * ## Capturing logs in tests
  *
@@ -181,7 +178,6 @@ package io.github.kotlinmania.envlogger
  * The `Builder.isTest` method can be used in unit tests to ensure logs will be captured:
  *
  * ```
- * // #[cfg(test)] mod tests { ... }
  * import io.github.kotlinmania.log.info
  *
  * fun init() {
@@ -199,15 +195,15 @@ package io.github.kotlinmania.envlogger
  * Enabling test capturing comes at the expense of color and other style support
  * and may have performance implications.
  *
- * ## Colors
+ * ## Disabling colors
  *
  * Outputting of colors and other styles can be controlled by the `RUST_LOG_STYLE`
  * environment variable. It accepts the following values (see
  * [io.github.kotlinmania.envlogger.writer.WriteStyle]):
  *
- * * `auto` (default) will attempt to print style characters, but don't force the issue.
- *   If the console isn't available on Windows, or if TERM=dumb, for example, then don't print colors.
- * * `always` will always print style characters even if they aren't supported by the terminal.
+ * * `auto` (default) will attempt to print style characters, but do not force the issue.
+ *   If the console is not available on Windows, or if TERM=dumb, for example, then do not print colors.
+ * * `always` will always print style characters even if they are not supported by the terminal.
  *   This includes emitting ANSI colors on Windows if the console API is unavailable.
  * * `never` will never print style characters.
  *
@@ -221,8 +217,7 @@ package io.github.kotlinmania.envlogger
  * Mitigations include:
  * - Setting `RUST_LOG_STYLE=never` to have all ANSI escape codes stripped
  * - In the application, calling `Builder.writeStyle(Never)` to have all ANSI escape codes stripped
- * - In the application, [stripping ANSI escape codes](https://docs.rs/anstream/latest/anstream/adapter/fn.strip_str.html)
- *   from user inputs
+ * - In the application, stripping ANSI escape codes from user inputs
  *
  * Note: deactivating the build-time feature `color` is not a mitigation as that removes all ANSI escape code
  * stripping from `envlogger`.
@@ -242,7 +237,7 @@ package io.github.kotlinmania.envlogger
  *
  * ### Stability of the default format
  *
- * The default format won't optimise for long-term stability, and explicitly makes no
+ * The default format will not optimise for long-term stability, and explicitly makes no
  * guarantees about the stability of its output across major, minor or patch version
  * bumps during `0.x`.
  *
@@ -268,9 +263,9 @@ package io.github.kotlinmania.envlogger
  * ## Specifying defaults for environment variables
  *
  * `envlogger` can read configuration from environment variables.
- * If these variables aren't present, the default value to use can be tweaked with the `Env` type.
+ * If these variables are not present, the default value to use can be tweaked with the `Env` type.
  * The following example defaults to log `warn` and above if the `RUST_LOG` environment variable
- * isn't set:
+ * is not set:
  *
  * ```
  * import io.github.kotlinmania.envlogger.Env
@@ -280,43 +275,15 @@ package io.github.kotlinmania.envlogger
  *     .init()
  * ```
  *
- * [gh-repo-examples]: https://github.com/rust-cli/env_logger/tree/main/examples
+ * [gh-repo-examples]: https://github.com/rust-cli/envlogger/tree/main/examples
  * [level-enum]: https://docs.rs/log/latest/log/enum.Level.html
- * [log-crate-url]: https://docs.rs/log
+ * [log-crate-url]: https://docs.rs/log/latest/log/
  */
-
-// Upstream sets crate-level lints:
-//   #![cfg_attr(docsrs, feature(doc_cfg))]
-//   #![warn(clippy::print_stderr)]
-//   #![warn(clippy::print_stdout)]
-//   #![allow(clippy::test_attr_in_doctest)]
-// These are Rust-only lints and have no Kotlin equivalent.
-
-// Upstream declares the following modules:
-//   mod logger;     -> Logger.kt, in the io.github.kotlinmania.envlogger package
-//   mod writer;     -> writer/Mod.kt and writer/{Target.kt, Buffer.kt}
-//   pub mod fmt;    -> fmt/Mod.kt and fmt/{Humantime.kt, Kv.kt}
-
-// Upstream re-exports:
-//   pub use self::fmt::{Target, TimestampPrecision, WriteStyle};
-//   pub use self::logger::*;
-//
-// Following the workspace `mod.rs` re-export rule, this file is kept as a
-// ledger and does NOT introduce typealiases. Callers reference the canonical
-// homes directly:
-//   - Target              -> io.github.kotlinmania.envlogger.writer.Target
-//   - TimestampPrecision  -> io.github.kotlinmania.envlogger.fmt.TimestampPrecision
-//   - WriteStyle          -> io.github.kotlinmania.envlogger.writer.WriteStyle
-//   - logger.*            -> io.github.kotlinmania.envlogger.* (Logger.kt)
-
-// Upstream attaches the README to a marker type so doctests pick it up:
-//   #[doc = include_str!("../README.md")]
-//   #[cfg(doctest)]
-//   pub struct ReadmeDoctests;
-// Kotlin has no doctest equivalent, so the marker type is intentionally omitted.
 
 /**
  * Internal sentinel ensuring this file is not empty for tooling purposes.
  * The real crate-level API surface is spread across Logger.kt, writer/, and fmt/.
  */
 internal object Lib
+
+internal object ReadmeDoctests

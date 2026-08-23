@@ -12,20 +12,9 @@ internal class BufferWriter private constructor(
     internal fun buffer(): Buffer = Buffer(ArrayList())
 
     internal fun print(buf: Buffer) {
-        // Upstream guards the stdout/stderr write paths with `clippy::print_stdout`
-        // and `clippy::print_stderr` allow attributes because the helpers are only
-        // built for the host test environment. Kotlin commonMain has no separate
-        // stderr stream, so the stdout/stderr variants both emit through the
-        // default common print path; callers that need genuine stderr semantics
-        // pass a [PipeSink] via [Target.Pipe], which is preserved verbatim from
-        // upstream.
         val bytes = buf.asBytes()
         when (target) {
             WritableTarget.WriteStdout -> {
-                // The upstream code locks `io::stdout()` and feeds bytes through
-                // `anstream::AutoStream` when the `color` feature is enabled.
-                // The Kotlin port turns colors off at the commonMain layer
-                // (matching `cfg(not(feature = "color"))`).
                 writeAllToCommonStdout(bytes)
             }
             WritableTarget.PrintStdout -> {
@@ -40,10 +29,6 @@ internal class BufferWriter private constructor(
                 kotlin.io.print(text)
             }
             is WritableTarget.Pipe -> {
-                // The upstream `pipe.lock().expect("no panics while held")` is
-                // collapsed: [PipeSink] is the Kotlin stand-in for
-                // `Box<Mutex<dyn io::Write + Send + 'static>>` and callers own
-                // any synchronization required by their sink.
                 target.sink.writeAll(bytes)
                 target.sink.flush()
             }
@@ -113,8 +98,7 @@ internal class Buffer internal constructor(
  * Log target, either `stdout`, `stderr` or a custom pipe.
  *
  * Same as [Target], except the pipe is wrapped in a sink for interior
- * mutability. Upstream wraps the boxed writer in `Mutex` to satisfy the
- * `Send + 'static` bounds; the Kotlin port leaves locking to the caller-
+ * mutability. The Kotlin port leaves locking to the caller-
  * supplied [PipeSink] implementation.
  */
 internal sealed class WritableTarget {

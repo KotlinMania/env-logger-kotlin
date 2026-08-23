@@ -15,9 +15,7 @@ import io.github.kotlinmania.log.kv.VisitSource
  * This function determines how key/value pairs for structured logs are
  * serialized within the default format.
  */
-public fun interface KvFormatFn {
-    public operator fun invoke(formatter: Formatter, fields: Source)
-}
+public typealias KvFormatFn = (Formatter, Source) -> Unit
 
 /**
  * Null Key Value Format.
@@ -29,9 +27,7 @@ public fun interface KvFormatFn {
  * include them in the output.
  */
 public fun hiddenKvFormat(formatter: Formatter, fields: Source) {
-    // Upstream's `hidden_kv_format` returns `Ok(())` after ignoring the
-    // formatter and the fields source. The Kotlin port keeps the parameters
-    // in the signature to satisfy [KvFormatFn] but performs no work.
+    // Null format ignores formatter and fields.
 }
 
 /**
