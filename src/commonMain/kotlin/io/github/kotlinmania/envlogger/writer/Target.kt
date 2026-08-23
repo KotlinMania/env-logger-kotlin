@@ -6,10 +6,8 @@ import io.github.kotlinmania.envlogger.PipeSink
 /**
  * Log target, either `stdout`, `stderr` or a custom pipe.
  *
- * Upstream marks the enum `#[non_exhaustive]`; downstream `when` branches
- * over [Target] should always carry an `else` arm so future variants
- * compile cleanly. The upstream `#[derive(Default)]` is replicated by
- * [Target.default], which returns [Stderr].
+ * Downstream `when` branches over [Target] should carry an `else` arm so future variants
+ * compile cleanly. The default target is [Target.default], which returns [Stderr].
  */
 public sealed class Target {
     /** Logs will be sent to standard output. */
@@ -24,10 +22,7 @@ public sealed class Target {
     ) : Target()
 
     /**
-     * Mirrors the upstream `std::fmt::Debug` implementation. The Kotlin
-     * port collapses Rust's `Debug` and `Display` shapes onto Kotlin's
-     * single [toString], so the lowercase tag is observable through any
-     * formatter that asks for a string representation.
+     * String representation of target.
      */
     override fun toString(): String =
         when (this) {

@@ -80,18 +80,12 @@ public class Timestamp internal constructor(
     internal val precision: TimestampPrecision,
 ) {
     /**
-     * Upstream `impl fmt::Debug for Timestamp` wraps the displayed value in a
-     * `Timestamp(...)` tuple-struct rendering. The Kotlin port mirrors that
-     * single-line shape via a debug-only helper exposed through
-     * [debugString]; the canonical [toString] keeps the RFC 3339 rendering
-     * for log output.
+     * Debug string representation.
      */
     public fun debugString(): String = "Timestamp($this)"
 
     /**
-     * Render this timestamp as an RFC 3339 date-time in UTC at the configured
-     * precision. Equivalent to upstream
-     * `impl fmt::Display for Timestamp`.
+     * Render this timestamp as an RFC 3339 date-time in UTC at the configured precision.
      */
     override fun toString(): String {
         val ldt = time.toLocalDateTime(TimeZone.UTC)
@@ -115,4 +109,10 @@ public class Timestamp internal constructor(
             }
         return "$year-$month-${day}T$hour:$minute:$second${fractional}Z"
     }
+}
+
+internal class TimestampValue(
+    internal val timestamp: Timestamp,
+) {
+    override fun toString(): String = timestamp.toString()
 }

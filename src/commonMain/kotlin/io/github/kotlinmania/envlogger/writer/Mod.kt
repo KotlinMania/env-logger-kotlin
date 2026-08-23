@@ -3,18 +3,6 @@ package io.github.kotlinmania.envlogger.writer
 
 import io.github.kotlinmania.envlogger.PipeSink
 
-// Upstream Rust module declarations and re-exports preserved as a ledger:
-//   mod buffer;                          -> Buffer.kt (sibling, internal-visible)
-//   mod target;                          -> Target.kt (sibling)
-//   pub(crate) use buffer::Buffer;       -> internal members of Buffer.kt are
-//                                           reachable via the writer package.
-//   pub use target::Target;              -> Target is public on Target.kt;
-//                                           the writer package itself is the
-//                                           public surface, so no re-export
-//                                           typealias is added (per repo
-//                                           CLAUDE.md "Re-exports from
-//                                           upstream mod.rs files").
-
 /** Whether or not to print styles to the target. */
 public enum class WriteStyle {
     /** Try to print styles, but don't force the issue. */
@@ -30,13 +18,11 @@ public enum class WriteStyle {
     public companion object {
         /** Returns the default [WriteStyle], which is [Auto]. */
         public fun default(): WriteStyle = Auto
+
+        /** Parses a write style from a string. */
+        public fun from(choice: String): WriteStyle = parseWriteStyleSpec(choice)
     }
 }
-
-// Upstream gates two `From` conversions on the `color` feature, mapping
-// `anstream::ColorChoice` to and from [WriteStyle]. The Kotlin port does not
-// depend on `anstream`, so those conversions are omitted (equivalent to
-// `cfg(not(feature = "color"))`).
 
 /**
  * A terminal target with color awareness.
@@ -84,7 +70,7 @@ internal class Builder internal constructor() {
         return this
     }
 
-    /** Whether or not to capture logs for `cargo test`. */
+    /** Whether or not to capture logs for tests. */
     internal fun isTest(isTest: Boolean): Builder {
         this.isTest = isTest
         return this
@@ -95,22 +81,11 @@ internal class Builder internal constructor() {
         check(!built) { "attempt to re-use consumed builder" }
         built = true
 
-        // Upstream resolves `WriteStyle::Auto` against the runtime stdout/
-        // stderr stream via `anstream::AutoStream::choice` when the
-        // `auto-color` feature is enabled. The Kotlin port runs without
-        // `anstream`, so `Auto` collapses to `Never` for the stdout/stderr
-        // targets and is preserved verbatim for pipe targets, matching the
-        // shape of `cfg(not(feature = "auto-color"))` upstream.
         var colorChoice = writeStyle
         if (colorChoice == WriteStyle.Auto) {
             colorChoice = WriteStyle.Never
         }
 
-        // Upstream uses `mem::take(&mut self.target)` to move the target out
-        // of the builder. Kotlin lacks move semantics; the equivalent is
-        // reading the current target and resetting the builder's field to
-        // the default, which preserves the assertion that the consumed
-        // builder cannot be reused.
         val currentTarget = target
         target = Target.default()
 

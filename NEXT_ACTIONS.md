@@ -4,14 +4,14 @@ Based on AST analysis, here are the concrete next steps.
 
 ## Summary
 
-- **Files Present:** 7/8 (87.5%)
-- **Function parity:** 72/147 matched (target 110) — 49.0%
-- **Class/type parity:** 16/26 matched (target 31) — 61.5%
-- **Combined symbol parity:** 88/173 matched (target 141) — 50.9%
-- **Average inline-code cosine:** 0.00 (function body across 4 matched files)
-- **Average documentation cosine:** 0.80 (doc text across 4 matched files)
-- **Cheat-zeroed Files:** 7
-- **Critical Issues:** 7 files with <0.60 function similarity
+- **Files Present:** 8/8 (100.0%)
+- **Function parity:** 128/136 matched (target 201) — 94.1%
+- **Class/type parity:** 24/26 matched (target 44) — 92.3%
+- **Combined symbol parity:** 152/162 matched (target 245) — 93.8%
+- **Average inline-code cosine:** 0.61 (function body across 6 matched files)
+- **Average documentation cosine:** 0.85 (doc text across 6 matched files)
+- **Cheat-zeroed Files:** 2
+- **Critical Issues:** 5 files with <0.60 function similarity
 
 ## Priority 1: Fix Incomplete High-Dependency Files
 
@@ -29,7 +29,7 @@ Every matched file is listed below with function and type symbol parity.
 
 ### 1. writer.target
 
-- **Target:** `writer.Target [ZERO] [PROVENANCE-FALLBACK]`
+- **Target:** `writer.Target`
 - **Similarity:** 0.00
 - **Dependents:** 2
 - **Priority Score:** 2010210.0
@@ -37,104 +37,87 @@ Every matched file is listed below with function and type symbol parity.
 - **Missing functions:** `fmt`
 - **Types:** 1/1 matched (target 6)
 - **Missing types:** _none_
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `src/writer/target.rs` vs expected `writer/target.rs`
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `src/writer/target.rs` vs expected `writer/target.rs`
-- **Proposed provenance header:** `// port-lint: source writer/target.rs` (current: `// port-lint: source src/writer/target.rs`)
-- **Proposed provenance header:** `// port-lint: source writer/target.rs` (current: `// port-lint: source src/writer/target.rs`)
-- **Lint issues:** 2
 
 ### 2. writer.buffer
 
-- **Target:** `writer.Buffer [ZERO] [PROVENANCE-FALLBACK]`
-- **Similarity:** 0.00
+- **Target:** `writer.Buffer`
+- **Similarity:** 0.51
 - **Dependents:** 1
-- **Priority Score:** 1021510.0
+- **Priority Score:** 1021504.9
 - **Functions:** 10/12 matched (target 13)
 - **Missing functions:** `adapt`, `fmt`
 - **Types:** 3/3 matched (target 8)
 - **Missing types:** _none_
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `src/writer/buffer.rs` vs expected `writer/buffer.rs`
-- **Proposed provenance header:** `// port-lint: source writer/buffer.rs` (current: `// port-lint: source src/writer/buffer.rs`)
-- **Lint issues:** 1
 
 ### 3. fmt.mod
 
-- **Target:** `fmt.Mod [STUB] [PROVENANCE-FALLBACK]`
+- **Target:** `fmt.Mod [STUB]`
 - **Similarity:** 0.00
 - **Dependents:** 0
-- **Priority Score:** 75510.0
-- **Functions:** 41/45 matched (target 52)
-- **Missing functions:** `new`, `fmt`, `write_record`, `formatter`
-- **Types:** 7/10 matched (target 8)
-- **Missing types:** `RecordFormat`, `FormatFn`, `IndentWrapper`
+- **Priority Score:** 55510.0
+- **Functions:** 42/45 matched (target 55)
+- **Missing functions:** `fmt`, `write_record`, `formatter`
+- **Types:** 8/10 matched (target 9)
+- **Missing types:** `RecordFormat`, `FormatFn`
 - **Tests:** 13/15 matched
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `src/fmt/mod.rs` vs expected `fmt/mod.rs`
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `src/fmt/mod.rs` vs expected `fmt/mod.rs`
-- **Proposed provenance header:** `// port-lint: source fmt/mod.rs` (current: `// port-lint: source src/fmt/mod.rs`)
-- **Proposed provenance header:** `// port-lint: source fmt/mod.rs` (current: `// port-lint: source src/fmt/mod.rs`)
-- **Lint issues:** 2
 
-### 4. fmt.humantime
+### 4. logger
 
-- **Target:** `fmt.Humantime [ZERO] [PROVENANCE-FALLBACK]`
-- **Similarity:** 0.00
+- **Target:** `envlogger.Logger`
+- **Similarity:** 0.84
 - **Dependents:** 0
-- **Priority Score:** 20910.0
-- **Functions:** 6/7 matched (target 8)
+- **Priority Score:** 15901.6
+- **Functions:** 54/55 matched (target 86)
 - **Missing functions:** `fmt`
-- **Types:** 1/2 matched
-- **Missing types:** `TimestampValue`
+- **Types:** 4/4 matched (target 8)
+- **Missing types:** _none_
+- **Tests:** 5/5 matched
+
+### 5. fmt.humantime
+
+- **Target:** `fmt.Humantime`
+- **Similarity:** 0.52
+- **Dependents:** 0
+- **Priority Score:** 10904.8
+- **Functions:** 6/7 matched (target 9)
+- **Missing functions:** `fmt`
+- **Types:** 2/2 matched (target 3)
+- **Missing types:** _none_
 - **Tests:** 1/1 matched
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `src/fmt/humantime.rs` vs expected `fmt/humantime.rs`
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `src/fmt/humantime.rs` vs expected `fmt/humantime.rs`
-- **Proposed provenance header:** `// port-lint: source fmt/humantime.rs` (current: `// port-lint: source src/fmt/humantime.rs`)
-- **Proposed provenance header:** `// port-lint: source fmt/humantime.rs` (current: `// port-lint: source src/fmt/humantime.rs`)
-- **Lint issues:** 2
 
-### 5. writer.mod
+### 6. writer.mod
 
-- **Target:** `writer.Mod [STUB] [PROVENANCE-FALLBACK]`
+- **Target:** `writer.Mod [STUB]`
 - **Similarity:** 0.00
 - **Dependents:** 0
-- **Priority Score:** 11510.0
-- **Functions:** 11/12 matched (target 26)
-- **Missing functions:** `from`
+- **Priority Score:** 1510.0
+- **Functions:** 12/12 matched (target 27)
+- **Missing functions:** _none_
 - **Types:** 3/3 matched (target 5)
 - **Missing types:** _none_
 - **Tests:** 2/2 matched
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `src/writer/mod.rs` vs expected `writer/mod.rs`
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `src/writer/mod.rs` vs expected `writer/mod.rs`
-- **Proposed provenance header:** `// port-lint: source writer/mod.rs` (current: `// port-lint: source src/writer/mod.rs`)
-- **Proposed provenance header:** `// port-lint: source writer/mod.rs` (current: `// port-lint: source src/writer/mod.rs`)
-- **Lint issues:** 2
 
-### 6. fmt.kv
+### 7. fmt.kv
 
-- **Target:** `fmt.Kv [ZERO] [PROVENANCE-FALLBACK]`
-- **Similarity:** 0.00
+- **Target:** `fmt.Kv`
+- **Similarity:** 0.79
 - **Dependents:** 0
-- **Priority Score:** 10610.0
+- **Priority Score:** 602.1
 - **Functions:** 4/4 matched
 - **Missing functions:** _none_
-- **Types:** 1/2 matched (target 1)
-- **Missing types:** `KvFormatFn`
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `src/fmt/kv.rs` vs expected `fmt/kv.rs`
-- **Proposed provenance header:** `// port-lint: source fmt/kv.rs` (current: `// port-lint: source src/fmt/kv.rs`)
-- **Lint issues:** 1
+- **Types:** 2/2 matched
+- **Missing types:** _none_
 
-### 7. lib
+### 8. lib
 
-- **Target:** `envlogger.Lib [STUB] [PROVENANCE-FALLBACK]`
-- **Similarity:** 0.00
+- **Target:** `envlogger.Lib`
+- **Similarity:** 1.00
 - **Dependents:** 0
-- **Priority Score:** 10110.0
+- **Priority Score:** 100.0
 - **Functions:** 0/0 matched
 - **Missing functions:** _none_
-- **Types:** 0/1 matched
-- **Missing types:** `ReadmeDoctests`
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `src/lib.rs` vs expected `lib.rs`
-- **Proposed provenance header:** `// port-lint: source lib.rs` (current: `// port-lint: source src/lib.rs`)
-- **Lint issues:** 1
+- **Types:** 1/1 matched (target 3)
+- **Missing types:** _none_
 
 ## Success Criteria
 
