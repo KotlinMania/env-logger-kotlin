@@ -1,4 +1,4 @@
-// port-lint: source src/fmt/mod.rs (#[cfg(test)] tests module)
+// port-lint: tests fmt/mod.rs
 package io.github.kotlinmania.envlogger.fmt
 
 import io.github.kotlinmania.envlogger.writer.WriteStyle

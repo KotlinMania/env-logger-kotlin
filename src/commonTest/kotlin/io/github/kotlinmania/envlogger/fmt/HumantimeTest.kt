@@ -1,4 +1,4 @@
-// port-lint: source src/fmt/humantime.rs (#[cfg(test)] mod tests)
+// port-lint: tests fmt/humantime.rs
 package io.github.kotlinmania.envlogger.fmt
 
 import kotlin.test.Test
