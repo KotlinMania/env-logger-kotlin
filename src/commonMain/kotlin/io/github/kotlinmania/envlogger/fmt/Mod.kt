@@ -170,26 +170,50 @@ public class Formatter internal constructor(
         writeStr("\n")
     }
 
+    /**
+     * Formats formatter representation.
+     */
+    public fun fmt(): String = toString()
+
     override fun toString(): String = "Formatter(buf=$buf, writeStyle=$writeStyleField)"
 }
 
 /**
  * Format function for serializing a [Record] into a [Formatter].
  */
-internal fun interface RecordFormat {
-    fun format(formatter: Formatter, record: Record)
+public fun interface RecordFormat {
+    public fun format(formatter: Formatter, record: Record)
 }
 
 /**
  * Format function alias.
  */
-internal typealias FormatFn = RecordFormat
+public typealias FormatFn = RecordFormat
+
+internal fun writeRecord(record: Record, fmt: ConfigurableFormatWriter): String {
+    val buf = fmt.buf.buf
+    fmt.write(record)
+    return buf.asBytes().decodeToString()
+}
+
+internal fun formatter(): Formatter {
+    val writer =
+        io.github.kotlinmania.envlogger.writer.Builder
+            .new()
+            .writeStyle(WriteStyle.Never)
+            .build()
+    return Formatter(writer)
+}
 
 /**
  * Adapts a [ConfigurableFormat] to the [RecordFormat] functional interface.
  */
 private fun ConfigurableFormat.asRecordFormat(): RecordFormat =
-    RecordFormat { formatter, record -> format(formatter, record) }
+    object : RecordFormat {
+        override fun format(formatter: Formatter, record: Record) {
+            this@asRecordFormat.format(formatter, record)
+        }
+    }
 
 /**
  * Builder for a record format function.
@@ -231,6 +255,11 @@ internal data class StyledValue<T : Any>(
      * Renders the value wrapped in the style's ANSI escape sequences. Equivalent
      * to upstream `impl<T: Display> Display for StyledValue<T>`.
      */
+    /**
+     * Formats styled value representation.
+     */
+    internal fun fmt(): String = toString()
+
     override fun toString(): String =
         buildString {
             append(style.render())
@@ -339,6 +368,11 @@ public class ConfigurableFormat internal constructor(
         kvFormat = format
         return this
     }
+
+    /**
+     * Formats configurable format representation.
+     */
+    public fun fmt(): String = toString()
 }
 
 /**

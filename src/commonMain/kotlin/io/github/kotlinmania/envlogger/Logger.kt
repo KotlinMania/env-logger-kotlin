@@ -495,6 +495,11 @@ public class Builder internal constructor() {
         )
     }
 
+    /**
+     * Formats builder representation.
+     */
+    public fun fmt(): String = toString()
+
     override fun toString(): String =
         if (built) {
             "Logger(built=true)"
@@ -556,6 +561,11 @@ public class Logger internal constructor(
     }
 
     override fun flush() {}
+
+    /**
+     * Formats logger representation.
+     */
+    public fun fmt(): String = toString()
 
     override fun toString(): String = "Logger(filter=$filter)"
 }
