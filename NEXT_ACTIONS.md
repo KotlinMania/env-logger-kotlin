@@ -5,9 +5,9 @@ Based on AST analysis, here are the concrete next steps.
 ## Summary
 
 - **Files Present:** 8/8 (100.0%)
-- **Function parity:** 134/136 matched (target 213) — 98.5%
-- **Class/type parity:** 25/26 matched (target 45) — 96.2%
-- **Combined symbol parity:** 159/162 matched (target 258) — 98.1%
+- **Function parity:** 134/136 matched (target 221) — 98.5%
+- **Class/type parity:** 25/26 matched (target 48) — 96.2%
+- **Combined symbol parity:** 159/162 matched (target 269) — 98.1%
 - **Average inline-code cosine:** 0.65 (function body across 6 matched files)
 - **Average documentation cosine:** 0.85 (doc text across 6 matched files)
 - **Cheat-zeroed Files:** 2
@@ -44,9 +44,9 @@ Every matched file is listed below with function and type symbol parity.
 - **Similarity:** 0.57
 - **Dependents:** 1
 - **Priority Score:** 1001504.3
-- **Functions:** 12/12 matched (target 15)
+- **Functions:** 12/12 matched (target 20)
 - **Missing functions:** _none_
-- **Types:** 3/3 matched (target 8)
+- **Types:** 3/3 matched (target 10)
 - **Missing types:** _none_
 
 ### 3. fmt.mod
@@ -103,9 +103,9 @@ Every matched file is listed below with function and type symbol parity.
 - **Similarity:** 0.79
 - **Dependents:** 0
 - **Priority Score:** 602.1
-- **Functions:** 4/4 matched
+- **Functions:** 4/4 matched (target 7)
 - **Missing functions:** _none_
-- **Types:** 2/2 matched
+- **Types:** 2/2 matched (target 3)
 - **Missing types:** _none_
 
 ### 8. lib
