@@ -19,7 +19,7 @@ class ModTest {
             )
 
         for ((input, expected) in inputs) {
-            assertEquals(expected, parseWriteStyleSpec(input))
+            assertEquals(expected, parseWriteStyle(input))
         }
     }
 
@@ -28,7 +28,7 @@ class ModTest {
         val inputs = listOf("", "true", "false", "NEVER!!")
 
         for (input in inputs) {
-            assertEquals(WriteStyle.Auto, parseWriteStyleSpec(input))
+            assertEquals(WriteStyle.Auto, parseWriteStyle(input))
         }
     }
 

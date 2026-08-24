@@ -20,7 +20,7 @@ public enum class WriteStyle {
         public fun default(): WriteStyle = Auto
 
         /** Parses a write style from a string. */
-        public fun from(choice: String): WriteStyle = parseWriteStyleSpec(choice)
+        public fun from(choice: String): WriteStyle = parseWriteStyle(choice)
     }
 }
 
@@ -62,7 +62,7 @@ internal class Builder internal constructor() {
      * See the "Disabling colors" section in the crate-level docs for details.
      */
     internal fun parseWriteStyle(writeStyle: String): Builder =
-        writeStyle(parseWriteStyleSpec(writeStyle))
+        writeStyle(io.github.kotlinmania.envlogger.writer.parseWriteStyle(writeStyle))
 
     /** Whether or not to print style characters when writing. */
     internal fun writeStyle(writeStyle: WriteStyle): Builder {
@@ -114,7 +114,7 @@ internal class Builder internal constructor() {
     }
 }
 
-internal fun parseWriteStyleSpec(spec: String): WriteStyle =
+internal fun parseWriteStyle(spec: String): WriteStyle =
     when (spec) {
         "auto" -> WriteStyle.Auto
         "always" -> WriteStyle.Always
