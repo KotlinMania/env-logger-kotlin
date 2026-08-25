@@ -64,9 +64,9 @@ Every matched file is listed below with function and type symbol parity.
 ### 4. logger
 
 - **Target:** `envlogger.Logger`
-- **Similarity:** 0.84
+- **Similarity:** 0.83
 - **Dependents:** 0
-- **Priority Score:** 5901.6
+- **Priority Score:** 5901.7
 - **Functions:** 55/55 matched (target 91)
 - **Missing functions:** _none_
 - **Types:** 4/4 matched (target 8)
