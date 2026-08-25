@@ -27,7 +27,7 @@ package io.github.kotlinmania.envlogger
  * import io.github.kotlinmania.log.logEnabled
  * import io.github.kotlinmania.log.Level
  *
- * io.github.kotlinmania.envlogger.init()
+ * io.github.kotlinmania.envlogger.initLogger()
  *
  * debug("this is a debug %s", "message")
  * error("this is printed by default")

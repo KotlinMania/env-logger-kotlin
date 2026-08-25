@@ -914,11 +914,7 @@ tasks.register("hostTests") {
 // Patch generated SPM Package.swift to include minimum macOS platform for Swift Concurrency
 tasks.matching { it.name.contains("GenerateSPMPackage") }.configureEach {
     doLast {
-        val spmDir =
-            layout.buildDirectory
-                .dir("SPMPackage")
-                .orNull
-                ?.asFile
+        val spmDir = layout.buildDirectory.dir("SPMPackage").orNull?.asFile
         if (spmDir != null && spmDir.exists()) {
             spmDir.walkTopDown().filter { it.name == "Package.swift" }.forEach { file ->
                 val text = file.readText()
@@ -929,34 +925,6 @@ tasks.matching { it.name.contains("GenerateSPMPackage") }.configureEach {
                             "$1\n    platforms: [.macOS(.v14)],",
                         ),
                     )
-                }
-            }
-            spmDir.walkTopDown().filter { it.extension == "swift" }.forEach { file ->
-                val text = file.readText()
-                val patched = text.replace(Regex("""(ExportedKotlinPackages\.[a-zA-Z0-9_.]+)\.init\(\)"""), "$1.`init`()")
-                if (patched != text) {
-                    file.writeText(patched)
-                }
-            }
-        }
-    }
-}
-
-// Patch generated SwiftExport Kotlin bridge files to fix Result<Any?> cast mismatches
-tasks.matching { it.name.endsWith("SwiftExport") }.configureEach {
-    doLast {
-        val swiftExportDir =
-            layout.buildDirectory
-                .dir("SwiftExport")
-                .orNull
-                ?.asFile
-        if (swiftExportDir != null && swiftExportDir.exists()) {
-            swiftExportDir.walkTopDown().filter { it.name == "IoGithubKotlinmaniaLogKotlin.kt" }.forEach { file ->
-                val text = file.readText()
-                val target = "kotlin.native.internal.ref.dereferenceExternalRCRef(_result) as kotlin.Result<kotlin.Any?>"
-                val replacement = "@Suppress(\"UNCHECKED_CAST\")\n            (kotlin.native.internal.ref.dereferenceExternalRCRef(_result) as kotlin.Result<*>) as kotlin.Result<kotlin.Unit>"
-                if (text.contains(target)) {
-                    file.writeText(text.replace(target, replacement))
                 }
             }
         }
@@ -1004,23 +972,6 @@ tasks.register("swiftExportSmokeTest") {
                     ),
                 )
             }.assertNormalExitValue()
-
-        val generatedPackageSwift =
-            layout.buildDirectory
-                .file("SPMPackage/macosArm64/Debug/Package.swift")
-                .get()
-                .asFile
-        if (generatedPackageSwift.exists()) {
-            val text = generatedPackageSwift.readText()
-            if (!text.contains("platforms:")) {
-                generatedPackageSwift.writeText(
-                    text.replaceFirst(
-                        Regex("(name:\\s*\"[^\"]*\",)"),
-                        "\$1\n    platforms: [.macOS(.v14)],",
-                    ),
-                )
-            }
-        }
 
         execOperations
             .exec {
