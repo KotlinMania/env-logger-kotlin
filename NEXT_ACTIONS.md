@@ -5,9 +5,9 @@ Based on AST analysis, here are the concrete next steps.
 ## Summary
 
 - **Files Present:** 8/8 (100.0%)
-- **Function parity:** 134/136 matched (target 221) — 98.5%
-- **Class/type parity:** 25/26 matched (target 48) — 96.2%
-- **Combined symbol parity:** 159/162 matched (target 269) — 98.1%
+- **Function parity:** 134/136 matched (target 223) — 98.5%
+- **Class/type parity:** 26/26 matched (target 49) — 100.0%
+- **Combined symbol parity:** 160/162 matched (target 272) — 98.8%
 - **Average inline-code cosine:** 0.65 (function body across 6 matched files)
 - **Average documentation cosine:** 0.85 (doc text across 6 matched files)
 - **Cheat-zeroed Files:** 2
@@ -54,11 +54,11 @@ Every matched file is listed below with function and type symbol parity.
 - **Target:** `fmt.Mod [STUB]`
 - **Similarity:** 0.00
 - **Dependents:** 0
-- **Priority Score:** 35510.0
-- **Functions:** 43/45 matched (target 60)
+- **Priority Score:** 25510.0
+- **Functions:** 43/45 matched (target 62)
 - **Missing functions:** `write_record`, `formatter`
-- **Types:** 9/10 matched
-- **Missing types:** `RecordFormat`
+- **Types:** 10/10 matched (target 11)
+- **Missing types:** _none_
 - **Tests:** 13/15 matched
 
 ### 4. logger
