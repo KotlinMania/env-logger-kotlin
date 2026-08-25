@@ -181,8 +181,17 @@ public class Formatter internal constructor(
 /**
  * Format function for serializing a [Record] into a [Formatter].
  */
-public fun interface RecordFormat {
+public interface RecordFormat {
     public fun format(formatter: Formatter, record: Record)
+
+    public companion object {
+        public inline operator fun invoke(crossinline block: (Formatter, Record) -> Unit): RecordFormat =
+            object : RecordFormat {
+                override fun format(formatter: Formatter, record: Record) {
+                    block(formatter, record)
+                }
+            }
+    }
 }
 
 /**
