@@ -62,7 +62,10 @@ internal class Builder internal constructor() {
      * See the "Disabling colors" section in the crate-level docs for details.
      */
     internal fun parseWriteStyle(writeStyle: String): Builder =
-        writeStyle(io.github.kotlinmania.envlogger.writer.parseWriteStyle(writeStyle))
+        writeStyle(
+            io.github.kotlinmania.envlogger.writer
+                .parseWriteStyle(writeStyle),
+        )
 
     /** Whether or not to print style characters when writing. */
     internal fun writeStyle(writeStyle: WriteStyle): Builder {
