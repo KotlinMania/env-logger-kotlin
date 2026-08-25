@@ -66,4 +66,27 @@ class LoggerTest {
 
         assertEquals(LevelFilter.Debug, builder.filter.build().maxLevel())
     }
+
+    private fun initLogger() {
+        Builder.fromDefaultEnv()
+            .filterLevel(LevelFilter.Trace)
+            .isTest(true)
+            .tryInit()
+    }
+
+    @Test
+    fun itWorks() {
+        initLogger()
+        val a = 1
+        val b = 2
+        assertEquals(3, a + b)
+    }
+
+    @Test
+    fun itDoesNotWork() {
+        initLogger()
+        val a = 1
+        val b = 2
+        assertEquals(3, a + b)
+    }
 }
