@@ -677,7 +677,7 @@ public fun tryInit(): Result<Unit> = tryInitFromEnv(Env.default())
 /**
  * Initializes the global logger with an env logger.
  */
-public fun init() {
+public fun initLogger() {
     tryInit().getOrThrow()
 }
 
