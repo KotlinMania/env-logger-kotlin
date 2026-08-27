@@ -1,4 +1,4 @@
-// port-lint: tests env_logger/src/writer/buffer.rs
+// port-lint: tests writer/buffer.rs
 package io.github.kotlinmania.envlogger.writer
 
 import io.github.kotlinmania.envlogger.PipeSink
