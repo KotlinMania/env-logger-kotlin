@@ -4,14 +4,14 @@ Based on AST analysis, here are the concrete next steps.
 
 ## Summary
 
-- **Files Present:** 8/8 (100.0%)
-- **Function parity:** 134/136 matched (target 226) — 98.5%
+- **Files Present:** 8/15 (53.3%)
+- **Function parity:** 134/150 matched (target 226) — 89.3%
 - **Class/type parity:** 26/26 matched (target 49) — 100.0%
-- **Combined symbol parity:** 160/162 matched (target 275) — 98.8%
-- **Average inline-code cosine:** 0.65 (function body across 6 matched files)
-- **Average documentation cosine:** 0.85 (doc text across 6 matched files)
-- **Cheat-zeroed Files:** 2
-- **Critical Issues:** 5 files with <0.60 function similarity
+- **Combined symbol parity:** 160/176 matched (target 275) — 90.9%
+- **Average inline-code cosine:** 0.58 (function body across 5 matched files)
+- **Average documentation cosine:** 0.83 (doc text across 5 matched files)
+- **Cheat-zeroed Files:** 3
+- **Critical Issues:** 6 files with <0.60 function similarity
 
 ## Priority 1: Fix Incomplete High-Dependency Files
 
@@ -61,7 +61,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Missing types:** _none_
 - **Tests:** 13/15 matched
 
-### 4. logger
+### 4. env_logger.logger
 
 - **Target:** `envlogger.Logger`
 - **Similarity:** 0.83
@@ -108,16 +108,19 @@ Every matched file is listed below with function and type symbol parity.
 - **Types:** 2/2 matched (target 3)
 - **Missing types:** _none_
 
-### 8. lib
+### 8. env_logger.lib
 
-- **Target:** `envlogger.Lib`
-- **Similarity:** 1.00
+- **Target:** `envlogger.Lib [STUB] [PROVENANCE-FALLBACK]`
+- **Similarity:** 0.00
 - **Dependents:** 0
-- **Priority Score:** 100.0
+- **Priority Score:** 110.0
 - **Functions:** 0/0 matched
 - **Missing functions:** _none_
 - **Types:** 1/1 matched (target 3)
 - **Missing types:** _none_
+- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `lib.rs` vs expected `lib.rs`
+- **Proposed provenance header:** `// port-lint: source lib.rs` (current: `// port-lint: source lib.rs`)
+- **Lint issues:** 1
 
 ## Success Criteria
 
