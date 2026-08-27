@@ -1,4 +1,4 @@
-// port-lint: tests env_logger/src/logger.rs
+// port-lint: tests logger.rs
 package io.github.kotlinmania.envlogger
 
 import io.github.kotlinmania.log.LevelFilter

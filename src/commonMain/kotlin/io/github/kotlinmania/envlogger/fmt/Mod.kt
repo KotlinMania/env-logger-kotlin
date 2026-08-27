@@ -1,4 +1,4 @@
-// port-lint: source env_logger/src/fmt/mod.rs
+// port-lint: source fmt/mod.rs
 package io.github.kotlinmania.envlogger.fmt
 
 import ai.solace.tui.anstyle.AnsiColor
