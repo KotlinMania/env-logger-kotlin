@@ -68,7 +68,8 @@ class LoggerTest {
     }
 
     private fun initLogger() {
-        Builder.fromDefaultEnv()
+        Builder
+            .fromDefaultEnv()
             .filterLevel(LevelFilter.Trace)
             .isTest(true)
             .tryInit()
