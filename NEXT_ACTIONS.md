@@ -5,12 +5,12 @@ Based on AST analysis, here are the concrete next steps.
 ## Summary
 
 - **Files Present:** 8/8 (100.0%)
-- **Function parity:** 134/136 matched (target 226) — 98.5%
-- **Class/type parity:** 26/26 matched (target 49) — 100.0%
-- **Combined symbol parity:** 160/162 matched (target 275) — 98.8%
+- **Function parity:** 79/79 matched (target 137) — 100.0%
+- **Class/type parity:** 13/13 matched (target 33) — 100.0%
+- **Combined symbol parity:** 92/92 matched (target 170) — 100.0%
 - **Average inline-code cosine:** 0.65 (function body across 6 matched files)
 - **Average documentation cosine:** 0.85 (doc text across 6 matched files)
-- **Cheat-zeroed Files:** 2
+- **Cheat-zeroed Files:** 0
 - **Critical Issues:** 5 files with <0.60 function similarity
 
 ## Priority 1: Fix Incomplete High-Dependency Files
@@ -49,19 +49,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Types:** 3/3 matched (target 10)
 - **Missing types:** _none_
 
-### 3. fmt.mod
-
-- **Target:** `fmt.Mod [STUB]`
-- **Similarity:** 0.00
-- **Dependents:** 0
-- **Priority Score:** 25510.0
-- **Functions:** 43/45 matched (target 62)
-- **Missing functions:** `write_record`, `formatter`
-- **Types:** 10/10 matched (target 11)
-- **Missing types:** _none_
-- **Tests:** 13/15 matched
-
-### 4. logger
+### 3. logger
 
 - **Target:** `envlogger.Logger`
 - **Similarity:** 0.83
@@ -73,19 +61,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Missing types:** _none_
 - **Tests:** 5/5 matched
 
-### 5. writer.mod
-
-- **Target:** `writer.Mod [STUB]`
-- **Similarity:** 0.00
-- **Dependents:** 0
-- **Priority Score:** 1510.0
-- **Functions:** 12/12 matched (target 27)
-- **Missing functions:** _none_
-- **Types:** 3/3 matched (target 5)
-- **Missing types:** _none_
-- **Tests:** 2/2 matched
-
-### 6. fmt.humantime
+### 4. fmt.humantime
 
 - **Target:** `fmt.Humantime`
 - **Similarity:** 0.57
@@ -97,7 +73,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Missing types:** _none_
 - **Tests:** 1/1 matched
 
-### 7. fmt.kv
+### 5. fmt.kv
 
 - **Target:** `fmt.Kv`
 - **Similarity:** 0.79
@@ -108,7 +84,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Types:** 2/2 matched (target 3)
 - **Missing types:** _none_
 
-### 8. lib
+### 6. lib
 
 - **Target:** `envlogger.Lib`
 - **Similarity:** 1.00
@@ -127,4 +103,18 @@ For each file to be considered "complete":
 - All tests ported
 - Documentation ported
 - port-lint header present
+
+## Reexport / Wiring Modules
+
+These files match `reexport_modules` patterns in `.ast_distance_config.json`. They are filtered out of
+normal priority and missing-file ladders because they are wiring
+modules, not direct logic ports. Consult them for call-site routing;
+do not treat them as the next implementation target by default.
+
+### Matched
+
+| Source | Target | Path |
+|--------|--------|------|
+| `fmt.mod` | `fmt.Mod` | `fmt/mod` |
+| `writer.mod` | `writer.Mod` | `writer/mod` |
 
