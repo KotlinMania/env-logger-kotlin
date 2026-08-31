@@ -1,4 +1,4 @@
-// port-lint: tests fmt/humantime.rs
+// port-lint: tests env_logger/src/fmt/humantime.rs
 package io.github.kotlinmania.envlogger.fmt
 
 import kotlin.test.Test
