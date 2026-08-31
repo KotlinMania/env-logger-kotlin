@@ -1,4 +1,4 @@
-// port-lint: source env_logger/src/fmt/mod.rs
+// port-lint: source fmt/mod.rs
 package io.github.kotlinmania.envlogger.fmt
 
 import ai.solace.tui.anstyle.AnsiColor
@@ -199,20 +199,6 @@ public interface RecordFormat {
  */
 public typealias FormatFn = RecordFormat
 
-internal fun writeRecord(record: Record, fmt: ConfigurableFormatWriter): String {
-    val buf = fmt.buf.buf
-    fmt.write(record)
-    return buf.asBytes().decodeToString()
-}
-
-internal fun formatter(): Formatter {
-    val writer =
-        io.github.kotlinmania.envlogger.writer.Builder
-            .new()
-            .writeStyle(WriteStyle.Never)
-            .build()
-    return Formatter(writer)
-}
 
 /**
  * Adapts a [ConfigurableFormat] to the [RecordFormat] functional interface.

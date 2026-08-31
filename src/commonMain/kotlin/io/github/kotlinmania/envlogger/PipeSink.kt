@@ -1,4 +1,4 @@
-// port-lint: source env_logger/src/lib.rs
+// port-lint: source lib.rs
 package io.github.kotlinmania.envlogger
 
 /**
