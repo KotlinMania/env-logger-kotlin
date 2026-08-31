@@ -2,7 +2,7 @@
   "type": "port",
   "name": "env-logger-kotlin",
   "source": {
-    "path": "tmp/env_logger/src",
+    "path": "tmp",
     "lang": "rust"
   },
   "target": {
