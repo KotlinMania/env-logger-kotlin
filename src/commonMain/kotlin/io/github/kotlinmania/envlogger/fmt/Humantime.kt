@@ -1,4 +1,4 @@
-// port-lint: source fmt/humantime.rs
+// port-lint: source env_logger/src/fmt/humantime.rs
 package io.github.kotlinmania.envlogger.fmt
 
 import kotlinx.datetime.TimeZone
