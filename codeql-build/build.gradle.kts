@@ -204,7 +204,29 @@ fun registerCodeqlCompileTask(
             stubLog.writeText(
                 "package io.github.kotlinmania.log\n\n" +
                     "public enum class Level {\n" +
-                    "    Error, Warn, Info, Debug, Trace\n" +
+                    "    Error, Warn, Info, Debug, Trace;\n" +
+                    "    public fun toLevelFilter(): LevelFilter = when (this) {\n" +
+                    "        Error -> LevelFilter.Error\n" +
+                    "        Warn -> LevelFilter.Warn\n" +
+                    "        Info -> LevelFilter.Info\n" +
+                    "        Debug -> LevelFilter.Debug\n" +
+                    "        Trace -> LevelFilter.Trace\n" +
+                    "    }\n" +
+                    "}\n\n" +
+                    "public enum class LevelFilter {\n" +
+                    "    Off, Error, Warn, Info, Debug, Trace;\n" +
+                    "    public fun toLevel(): Level? = when (this) {\n" +
+                    "        Off -> null\n" +
+                    "        Error -> Level.Error\n" +
+                    "        Warn -> Level.Warn\n" +
+                    "        Info -> Level.Info\n" +
+                    "        Debug -> Level.Debug\n" +
+                    "        Trace -> Level.Trace\n" +
+                    "    }\n" +
+                    "}\n\n" +
+                    "public interface Metadata {\n" +
+                    "    public fun level(): Level\n" +
+                    "    public fun target(): String\n" +
                     "}\n\n" +
                     "public interface Record {\n" +
                     "    public fun level(): Level\n" +
@@ -214,7 +236,14 @@ fun registerCodeqlCompileTask(
                     "    public fun target(): String\n" +
                     "    public fun args(): Any\n" +
                     "    public fun keyValues(): io.github.kotlinmania.log.kv.Source\n" +
-                    "}\n",
+                    "}\n\n" +
+                    "public interface Log {\n" +
+                    "    public fun enabled(metadata: Metadata): Boolean\n" +
+                    "    public fun log(record: Record)\n" +
+                    "    public fun flush()\n" +
+                    "}\n\n" +
+                    "public fun setLogger(logger: Log): Result<Unit> = Result.success(Unit)\n" +
+                    "public fun setMaxLevel(level: LevelFilter) {}\n",
             )
             commonSourceFiles.add(stubLog)
             sourceFiles.add(stubLog)
