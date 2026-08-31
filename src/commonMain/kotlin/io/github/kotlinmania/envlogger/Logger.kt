@@ -1,4 +1,4 @@
-// port-lint: source env_logger/src/logger.rs
+// port-lint: source logger.rs
 package io.github.kotlinmania.envlogger
 
 import io.github.kotlinmania.envlogger.fmt.Formatter

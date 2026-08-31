@@ -1,4 +1,4 @@
-// port-lint: tests env_logger/src/fmt/kv.rs
+// port-lint: tests fmt/kv.rs
 package io.github.kotlinmania.envlogger.fmt
 
 import io.github.kotlinmania.log.kv.Key

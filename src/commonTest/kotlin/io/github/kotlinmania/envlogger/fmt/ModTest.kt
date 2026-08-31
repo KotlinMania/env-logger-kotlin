@@ -1,4 +1,4 @@
-// port-lint: tests env_logger/src/fmt/mod.rs
+// port-lint: tests fmt/mod.rs
 package io.github.kotlinmania.envlogger.fmt
 
 import io.github.kotlinmania.log.Arguments
@@ -7,8 +7,24 @@ import io.github.kotlinmania.log.Record
 import io.github.kotlinmania.log.kv.Key
 import io.github.kotlinmania.log.kv.Source
 import io.github.kotlinmania.log.kv.toValue
+import io.github.kotlinmania.envlogger.writer.WriteStyle
 import kotlin.test.Test
 import kotlin.test.assertEquals
+
+private fun writeRecord(record: Record, fmt: ConfigurableFormatWriter): String {
+    val buf = fmt.buf.buf
+    fmt.write(record)
+    return buf.asBytes().decodeToString()
+}
+
+internal fun formatter(): Formatter {
+    val writer =
+        io.github.kotlinmania.envlogger.writer.Builder
+            .new()
+            .writeStyle(WriteStyle.Never)
+            .build()
+    return Formatter(writer)
+}
 
 private fun writeTarget(target: String, fmt: ConfigurableFormatWriter): String =
     writeRecord(
