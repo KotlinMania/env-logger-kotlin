@@ -1,4 +1,4 @@
-// port-lint: tests fmt/mod.rs
+// port-lint: tests env_logger/src/fmt/mod.rs
 package io.github.kotlinmania.envlogger.fmt
 
 import io.github.kotlinmania.log.Arguments
