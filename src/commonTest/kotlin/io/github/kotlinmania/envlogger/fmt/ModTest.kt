@@ -1,13 +1,13 @@
 // port-lint: tests fmt/mod.rs
 package io.github.kotlinmania.envlogger.fmt
 
+import io.github.kotlinmania.envlogger.writer.WriteStyle
 import io.github.kotlinmania.log.Arguments
 import io.github.kotlinmania.log.Level
 import io.github.kotlinmania.log.Record
 import io.github.kotlinmania.log.kv.Key
 import io.github.kotlinmania.log.kv.Source
 import io.github.kotlinmania.log.kv.toValue
-import io.github.kotlinmania.envlogger.writer.WriteStyle
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
