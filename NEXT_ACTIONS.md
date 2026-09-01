@@ -4,10 +4,10 @@ Based on AST analysis, here are the concrete next steps.
 
 ## Summary
 
-- **Files Present:** 8/15 (53.3%)
-- **Function parity:** 134/150 matched (target 226) — 89.3%
+- **Files Present:** 8/8 (100.0%)
+- **Function parity:** 134/136 matched (target 226) — 98.5%
 - **Class/type parity:** 25/25 matched (target 46) — 100.0%
-- **Combined symbol parity:** 159/175 matched (target 272) — 90.9%
+- **Combined symbol parity:** 159/161 matched (target 272) — 98.8%
 - **Average inline-code cosine:** 0.65 (function body across 6 matched files)
 - **Average documentation cosine:** 0.85 (doc text across 6 matched files)
 - **Cheat-zeroed Files:** 2
@@ -29,7 +29,7 @@ Every matched file is listed below with function and type symbol parity.
 
 ### 1. writer.target
 
-- **Target:** `writer.Target [PROVENANCE-FALLBACK]`
+- **Target:** `writer.Target`
 - **Similarity:** 0.15
 - **Dependents:** 2
 - **Priority Score:** 2000208.5
@@ -37,15 +37,10 @@ Every matched file is listed below with function and type symbol parity.
 - **Missing functions:** _none_
 - **Types:** 1/1 matched (target 6)
 - **Missing types:** _none_
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `writer/target.rs` vs expected `writer/target.rs`
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `tests:writer/target.rs` vs expected `writer/target.rs`
-- **Proposed provenance header:** `// port-lint: source writer/target.rs` (current: `// port-lint: source writer/target.rs`)
-- **Proposed provenance header:** `// port-lint: tests writer/target.rs` (current: `// port-lint: tests writer/target.rs`)
-- **Lint issues:** 2
 
 ### 2. writer.buffer
 
-- **Target:** `writer.Buffer [PROVENANCE-FALLBACK]`
+- **Target:** `writer.Buffer`
 - **Similarity:** 0.57
 - **Dependents:** 1
 - **Priority Score:** 1001504.3
@@ -53,15 +48,10 @@ Every matched file is listed below with function and type symbol parity.
 - **Missing functions:** _none_
 - **Types:** 3/3 matched (target 10)
 - **Missing types:** _none_
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `writer/buffer.rs` vs expected `writer/buffer.rs`
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `tests:writer/buffer.rs` vs expected `writer/buffer.rs`
-- **Proposed provenance header:** `// port-lint: source writer/buffer.rs` (current: `// port-lint: source writer/buffer.rs`)
-- **Proposed provenance header:** `// port-lint: tests writer/buffer.rs` (current: `// port-lint: tests writer/buffer.rs`)
-- **Lint issues:** 2
 
 ### 3. fmt.mod
 
-- **Target:** `fmt.Mod [STUB] [PROVENANCE-FALLBACK]`
+- **Target:** `fmt.Mod [STUB]`
 - **Similarity:** 0.00
 - **Dependents:** 0
 - **Priority Score:** 25510.0
@@ -70,15 +60,10 @@ Every matched file is listed below with function and type symbol parity.
 - **Types:** 10/10 matched (target 11)
 - **Missing types:** _none_
 - **Tests:** 13/15 matched
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `fmt/mod.rs` vs expected `fmt/mod.rs`
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `tests:fmt/mod.rs` vs expected `fmt/mod.rs`
-- **Proposed provenance header:** `// port-lint: source fmt/mod.rs` (current: `// port-lint: source fmt/mod.rs`)
-- **Proposed provenance header:** `// port-lint: tests fmt/mod.rs` (current: `// port-lint: tests fmt/mod.rs`)
-- **Lint issues:** 2
 
 ### 4. logger
 
-- **Target:** `envlogger.Logger [PROVENANCE-FALLBACK]`
+- **Target:** `envlogger.Logger`
 - **Similarity:** 0.83
 - **Dependents:** 0
 - **Priority Score:** 5901.7
@@ -87,15 +72,10 @@ Every matched file is listed below with function and type symbol parity.
 - **Types:** 4/4 matched (target 8)
 - **Missing types:** _none_
 - **Tests:** 5/5 matched
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `logger.rs` vs expected `logger.rs`
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `tests:logger.rs` vs expected `logger.rs`
-- **Proposed provenance header:** `// port-lint: source logger.rs` (current: `// port-lint: source logger.rs`)
-- **Proposed provenance header:** `// port-lint: tests logger.rs` (current: `// port-lint: tests logger.rs`)
-- **Lint issues:** 2
 
 ### 5. writer.mod
 
-- **Target:** `writer.Mod [STUB] [PROVENANCE-FALLBACK]`
+- **Target:** `writer.Mod [STUB]`
 - **Similarity:** 0.00
 - **Dependents:** 0
 - **Priority Score:** 1510.0
@@ -104,15 +84,10 @@ Every matched file is listed below with function and type symbol parity.
 - **Types:** 3/3 matched (target 5)
 - **Missing types:** _none_
 - **Tests:** 2/2 matched
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `writer/mod.rs` vs expected `writer/mod.rs`
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `tests:writer/mod.rs` vs expected `writer/mod.rs`
-- **Proposed provenance header:** `// port-lint: source writer/mod.rs` (current: `// port-lint: source writer/mod.rs`)
-- **Proposed provenance header:** `// port-lint: tests writer/mod.rs` (current: `// port-lint: tests writer/mod.rs`)
-- **Lint issues:** 2
 
 ### 6. fmt.humantime
 
-- **Target:** `fmt.Humantime [PROVENANCE-FALLBACK]`
+- **Target:** `fmt.Humantime`
 - **Similarity:** 0.57
 - **Dependents:** 0
 - **Priority Score:** 904.3
@@ -121,15 +96,10 @@ Every matched file is listed below with function and type symbol parity.
 - **Types:** 2/2 matched (target 3)
 - **Missing types:** _none_
 - **Tests:** 1/1 matched
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `fmt/humantime.rs` vs expected `fmt/humantime.rs`
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `tests:fmt/humantime.rs` vs expected `fmt/humantime.rs`
-- **Proposed provenance header:** `// port-lint: source fmt/humantime.rs` (current: `// port-lint: source fmt/humantime.rs`)
-- **Proposed provenance header:** `// port-lint: tests fmt/humantime.rs` (current: `// port-lint: tests fmt/humantime.rs`)
-- **Lint issues:** 2
 
 ### 7. fmt.kv
 
-- **Target:** `fmt.Kv [PROVENANCE-FALLBACK]`
+- **Target:** `fmt.Kv`
 - **Similarity:** 0.79
 - **Dependents:** 0
 - **Priority Score:** 602.1
@@ -137,11 +107,6 @@ Every matched file is listed below with function and type symbol parity.
 - **Missing functions:** _none_
 - **Types:** 2/2 matched (target 3)
 - **Missing types:** _none_
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `fmt/kv.rs` vs expected `fmt/kv.rs`
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `tests:fmt/kv.rs` vs expected `fmt/kv.rs`
-- **Proposed provenance header:** `// port-lint: source fmt/kv.rs` (current: `// port-lint: source fmt/kv.rs`)
-- **Proposed provenance header:** `// port-lint: tests fmt/kv.rs` (current: `// port-lint: tests fmt/kv.rs`)
-- **Lint issues:** 2
 
 ## Success Criteria
 
@@ -163,5 +128,5 @@ do not treat them as the next implementation target by default.
 
 | Source | Target | Path |
 |--------|--------|------|
-| `lib` | `envlogger.Lib` | `src/lib` |
+| `lib` | `envlogger.Lib` | `lib` |
 
