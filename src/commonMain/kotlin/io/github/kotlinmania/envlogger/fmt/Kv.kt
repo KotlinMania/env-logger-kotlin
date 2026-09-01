@@ -1,4 +1,4 @@
-// port-lint: source env_logger/src/fmt/kv.rs
+// port-lint: source fmt/kv.rs
 package io.github.kotlinmania.envlogger.fmt
 
 import ai.solace.tui.anstyle.Effects

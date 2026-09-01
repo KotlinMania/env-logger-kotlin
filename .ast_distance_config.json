@@ -2,7 +2,7 @@
   "type": "port",
   "name": "env-logger-kotlin",
   "source": {
-    "path": "tmp",
+    "path": "tmp/env_logger/src",
     "lang": "rust"
   },
   "target": {
@@ -15,6 +15,6 @@
     "todos": true,
     "lint": true
   },
-  "reexport_modules": ["fmt/mod", "writer/mod", "fmt.mod", "writer.mod", "mod.rs", "lib.rs"]
+  "reexport_modules": ["lib.rs", "lib"]
 }
 
