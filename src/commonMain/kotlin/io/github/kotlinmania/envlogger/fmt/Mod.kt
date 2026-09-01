@@ -199,7 +199,6 @@ public interface RecordFormat {
  */
 public typealias FormatFn = RecordFormat
 
-
 /**
  * Adapts a [ConfigurableFormat] to the [RecordFormat] functional interface.
  */
