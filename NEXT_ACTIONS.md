@@ -5,13 +5,15 @@ Based on AST analysis, here are the concrete next steps.
 ## Summary
 
 - **Files Present:** 8/8 (100.0%)
-- **Function parity:** 134/136 matched (target 226) — 98.5%
+- **Function parity:** 152/162 matched (target 226) — 93.8%
 - **Class/type parity:** 25/25 matched (target 46) — 100.0%
-- **Combined symbol parity:** 159/161 matched (target 272) — 98.8%
-- **Average inline-code cosine:** 0.65 (function body across 6 matched files)
+- **Combined symbol parity:** 177/187 matched (target 272) — 94.7%
+- **Average inline-code cosine:** 0.34 (function body across 6 matched files)
 - **Average documentation cosine:** 0.85 (doc text across 6 matched files)
 - **Cheat-zeroed Files:** 2
-- **Critical Issues:** 5 files with <0.60 function similarity
+- **Critical Issues:** 7 files with <0.60 function similarity
+- **Needs Review:** 0 files with 0.60-0.84 function similarity
+- **Excellent:** 1 files with >=0.85 function similarity
 
 ## Priority 1: Fix Incomplete High-Dependency Files
 
@@ -30,9 +32,9 @@ Every matched file is listed below with function and type symbol parity.
 ### 1. writer.target
 
 - **Target:** `writer.Target`
-- **Similarity:** 0.15
+- **Similarity:** 0.01
 - **Dependents:** 2
-- **Priority Score:** 2000208.5
+- **Priority Score:** 2000210.0
 - **Functions:** 1/1 matched (target 8)
 - **Missing functions:** _none_
 - **Types:** 1/1 matched (target 6)
@@ -41,11 +43,11 @@ Every matched file is listed below with function and type symbol parity.
 ### 2. writer.buffer
 
 - **Target:** `writer.Buffer`
-- **Similarity:** 0.57
+- **Similarity:** 0.17
 - **Dependents:** 1
-- **Priority Score:** 1001504.3
-- **Functions:** 12/12 matched (target 20)
-- **Missing functions:** _none_
+- **Priority Score:** 1011608.2
+- **Functions:** 12/13 matched (target 20)
+- **Missing functions:** `fmt`
 - **Types:** 3/3 matched (target 10)
 - **Missing types:** _none_
 
@@ -54,21 +56,21 @@ Every matched file is listed below with function and type symbol parity.
 - **Target:** `fmt.Mod [STUB]`
 - **Similarity:** 0.00
 - **Dependents:** 0
-- **Priority Score:** 25510.0
-- **Functions:** 43/45 matched (target 62)
-- **Missing functions:** `write_record`, `formatter`
+- **Priority Score:** 66410.0
+- **Functions:** 48/54 matched (target 62)
+- **Missing functions:** `default`, `flush`, `write_record`, `write_target`, `write`, `formatter`
 - **Types:** 10/10 matched (target 11)
 - **Missing types:** _none_
-- **Tests:** 13/15 matched
+- **Tests:** 13/17 matched
 
 ### 4. logger
 
 - **Target:** `envlogger.Logger`
-- **Similarity:** 0.83
+- **Similarity:** 0.38
 - **Dependents:** 0
-- **Priority Score:** 5901.7
-- **Functions:** 55/55 matched (target 91)
-- **Missing functions:** _none_
+- **Priority Score:** 17006.2
+- **Functions:** 65/66 matched (target 91)
+- **Missing functions:** `init`
 - **Types:** 4/4 matched (target 8)
 - **Missing types:** _none_
 - **Tests:** 5/5 matched
@@ -78,9 +80,9 @@ Every matched file is listed below with function and type symbol parity.
 - **Target:** `writer.Mod [STUB]`
 - **Similarity:** 0.00
 - **Dependents:** 0
-- **Priority Score:** 1510.0
-- **Functions:** 12/12 matched (target 27)
-- **Missing functions:** _none_
+- **Priority Score:** 11810.0
+- **Functions:** 14/15 matched (target 27)
+- **Missing functions:** `from`
 - **Types:** 3/3 matched (target 5)
 - **Missing types:** _none_
 - **Tests:** 2/2 matched
@@ -88,11 +90,11 @@ Every matched file is listed below with function and type symbol parity.
 ### 6. fmt.humantime
 
 - **Target:** `fmt.Humantime`
-- **Similarity:** 0.57
+- **Similarity:** 0.15
 - **Dependents:** 0
-- **Priority Score:** 904.3
-- **Functions:** 7/7 matched (target 11)
-- **Missing functions:** _none_
+- **Priority Score:** 11108.5
+- **Functions:** 8/9 matched (target 11)
+- **Missing functions:** `fmt`
 - **Types:** 2/2 matched (target 3)
 - **Missing types:** _none_
 - **Tests:** 1/1 matched
@@ -100,9 +102,9 @@ Every matched file is listed below with function and type symbol parity.
 ### 7. fmt.kv
 
 - **Target:** `fmt.Kv`
-- **Similarity:** 0.79
+- **Similarity:** 0.35
 - **Dependents:** 0
-- **Priority Score:** 602.1
+- **Priority Score:** 606.5
 - **Functions:** 4/4 matched (target 7)
 - **Missing functions:** _none_
 - **Types:** 2/2 matched (target 3)
