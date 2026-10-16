@@ -314,10 +314,10 @@ body-parser@2.3.0, body-parser@^2.2.2:
     raw-body "^3.0.2"
     type-is "^2.1.0"
 
-brace-expansion@5.0.9, brace-expansion@^5.0.5:
-  version "5.0.9"
-  resolved "https://registry.yarnpkg.com/brace-expansion/-/brace-expansion-5.0.9.tgz#7c72438809b5fa5babf54199a1f1c281a6984fcf"
-  integrity sha512-ScQ4IuvIEF1TMlP7Zt+vjJ//9zlPb2SDcxWxM3bk8s6t6GGdJ7KO1dCcTidOPJKePW30LE/2cT7wCyPho9/Wxg==
+brace-expansion@5.0.12, brace-expansion@^5.0.5:
+  version "5.0.12"
+  resolved "https://registry.yarnpkg.com/brace-expansion/-/brace-expansion-5.0.12.tgz#995fbb4750a77c4d16a7dc942ff2ca6ef8e675ec"
+  integrity sha512-YovQ3rzhaLMIrDjNDMkNS01tea93qhEhG5xy8f6+R0l+dw3Ki+5sCoIoI942iuLZTHWogWktgwVDhU09iNEimQ==
   dependencies:
     balanced-match "^4.0.2"
 
@@ -671,10 +671,10 @@ fast-deep-equal@^3.1.3:
   resolved "https://registry.yarnpkg.com/fast-deep-equal/-/fast-deep-equal-3.1.3.tgz#3a7d56b559d6cbc3eb512325244e619a65c6c525"
   integrity sha512-f3qQ9oQy9j2AhBe/H9VC91wLmKBCCU/gDOnKNAYG5hswO7BLKj09Hc5HYNz9cGI++xlpDCIgDaitVs03ATR84Q==
 
-fast-uri@3.1.7, fast-uri@^3.0.1:
-  version "3.1.7"
-  resolved "https://registry.yarnpkg.com/fast-uri/-/fast-uri-3.1.7.tgz#743157d957f3cbb4c65310e033dc2ad4ad7dc60a"
-  integrity sha512-dOvZVzjdZdz7phd9v6jCbwxrBW3fK6n8Rc0CtdmM4bumzMnxywBYhuph6J819RRw/ku+rLbelwfMunktuzVVHg==
+fast-uri@3.1.8, fast-uri@^3.0.1:
+  version "3.1.8"
+  resolved "https://registry.yarnpkg.com/fast-uri/-/fast-uri-3.1.8.tgz#f7db8d942e20eead3cfe93b0beeb4eb0169e938b"
+  integrity sha512-GZMtZUTNRpOVIECoXwLNZS5xUGE+mVNbTB8h/7Rwh2TFWcBQiPzTgyZi05BF9UMZKkLJv8XBRJTlU7zg8+ZfMg==
 
 fastest-levenshtein@^1.0.12:
   version "1.0.16"
@@ -1008,7 +1008,7 @@ karma-sourcemap-loader@0.4.0:
   dependencies:
     glob "^13.0.6"
     minimatch "^10.2.5"
-    webpack-merge "^4.2.2"
+    webpack-merge "^6.0.1"
 
 "karma@npm:karma-maintained@6.4.7":
   version "6.4.7"
@@ -1066,7 +1066,7 @@ locate-path@^6.0.0:
   dependencies:
     p-locate "^5.0.0"
 
-lodash@4.18.1, lodash@^4.17.15, lodash@^4.17.23:
+lodash@4.18.1, lodash@^4.17.23:
   version "4.18.1"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.18.1.tgz#ff2b66c1f6326d59513de2407bf881439812771c"
   integrity sha512-dMInicTPVE8d1e5otfwmmjlxkZoUpiVLwyeTdUsi/Caj/gfzzblBcCE5sRHV/AsjuCmxWrte2TNGSYuCeCq+0Q==
@@ -1764,13 +1764,6 @@ webpack-cli@7.0.2:
     interpret "^3.1.1"
     rechoir "^0.8.0"
     webpack-merge "^6.0.1"
-
-webpack-merge@^4.2.2:
-  version "4.2.2"
-  resolved "https://registry.yarnpkg.com/webpack-merge/-/webpack-merge-4.2.2.tgz#a27c52ea783d1398afd2087f547d7b9d2f43634d"
-  integrity sha512-TUE1UGoTX2Cd42j3krGYqObZbOD+xF7u28WB7tfUordytSjbWTIjK/8V0amkBfTYN4/pB/GIDlJZZ657BGG19g==
-  dependencies:
-    lodash "^4.17.15"
 
 webpack-merge@^6.0.1:
   version "6.0.1"

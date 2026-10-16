@@ -17,17 +17,21 @@ internal class BufferWriter private constructor(
             WritableTarget.WriteStdout -> {
                 writeAllToCommonStdout(bytes)
             }
+
             WritableTarget.PrintStdout -> {
                 val text = bytes.decodeToString()
                 kotlin.io.print(text)
             }
+
             WritableTarget.WriteStderr -> {
                 writeAllToCommonStdout(bytes)
             }
+
             WritableTarget.PrintStderr -> {
                 val text = bytes.decodeToString()
                 kotlin.io.print(text)
             }
+
             is WritableTarget.Pipe -> {
                 target.sink.writeAll(bytes)
                 target.sink.flush()
