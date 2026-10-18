@@ -39,6 +39,10 @@ internal class BufferWriter private constructor(
         }
     }
 
+    public fun fmt(): String = "BufferWriter(target=$target, writeStyle=$writeStyle)"
+
+    override fun toString(): String = fmt()
+
     internal companion object {
         internal fun stderr(isTest: Boolean, writeStyle: WriteStyle): BufferWriter =
             BufferWriter(
@@ -131,7 +135,7 @@ internal sealed class WritableTarget {
      * `Stdout` variants and the two `Stderr` variants share their string
      * names because they share their output destination.
      */
-    override fun toString(): String =
+    public fun fmt(): String =
         when (this) {
             WriteStdout -> "stdout"
             PrintStdout -> "stdout"
@@ -139,4 +143,6 @@ internal sealed class WritableTarget {
             PrintStderr -> "stderr"
             is Pipe -> "pipe"
         }
+
+    override fun toString(): String = fmt()
 }

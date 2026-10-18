@@ -87,7 +87,7 @@ public class Timestamp internal constructor(
     /**
      * Render this timestamp as an RFC 3339 date-time in UTC at the configured precision.
      */
-    override fun toString(): String {
+    public fun fmt(): String {
         val ldt = time.toLocalDateTime(TimeZone.UTC)
         val year = ldt.year.toString().padStart(4, '0')
         val month =
@@ -110,10 +110,7 @@ public class Timestamp internal constructor(
         return "$year-$month-${day}T$hour:$minute:$second${fractional}Z"
     }
 
-    /**
-     * Formats timestamp representation.
-     */
-    public fun fmt(): String = toString()
+    override fun toString(): String = fmt()
 }
 
 internal class TimestampValue(

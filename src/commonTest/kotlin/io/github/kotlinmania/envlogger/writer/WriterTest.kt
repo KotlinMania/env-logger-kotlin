@@ -1,4 +1,3 @@
-// port-lint: tests writer/mod.rs
 package io.github.kotlinmania.envlogger.writer
 
 import io.github.kotlinmania.envlogger.PipeSink
@@ -8,7 +7,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 import kotlin.test.assertSame
 
-class ModTest {
+class WriterTest {
     @Test
     fun parseWriteStyleValid() {
         val inputs =

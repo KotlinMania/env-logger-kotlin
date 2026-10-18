@@ -4,16 +4,14 @@ Based on AST analysis, here are the concrete next steps.
 
 ## Summary
 
-- **Files Present:** 8/8 (100.0%)
-- **Function parity:** 152/162 matched (target 226) — 93.8%
-- **Class/type parity:** 25/25 matched (target 46) — 100.0%
-- **Combined symbol parity:** 177/187 matched (target 272) — 94.7%
-- **Average inline-code cosine:** 0.34 (function body across 6 matched files)
-- **Average documentation cosine:** 0.85 (doc text across 6 matched files)
-- **Cheat-zeroed Files:** 2
-- **Critical Issues:** 7 files with <0.60 function similarity
-- **Needs Review:** 0 files with 0.60-0.84 function similarity
-- **Excellent:** 1 files with >=0.85 function similarity
+- **Files Present:** 6/8 (75.0%)
+- **Function parity:** 79/79 matched (target 140) — 100.0%
+- **Class/type parity:** 12/12 matched (target 30) — 100.0%
+- **Combined symbol parity:** 91/91 matched (target 170) — 100.0%
+- **Average inline-code cosine:** 0.72 (function body across 6 matched files)
+- **Average documentation cosine:** 0.71 (doc text across 6 matched files)
+- **Cheat-zeroed Files:** 0
+- **Critical Issues:** 2 files with <0.60 function similarity
 
 ## Priority 1: Fix Incomplete High-Dependency Files
 
@@ -32,9 +30,9 @@ Every matched file is listed below with function and type symbol parity.
 ### 1. writer.target
 
 - **Target:** `writer.Target`
-- **Similarity:** 0.01
+- **Similarity:** 0.50
 - **Dependents:** 2
-- **Priority Score:** 2000210.0
+- **Priority Score:** 2000205.0
 - **Functions:** 1/1 matched (target 8)
 - **Missing functions:** _none_
 - **Types:** 1/1 matched (target 6)
@@ -43,68 +41,44 @@ Every matched file is listed below with function and type symbol parity.
 ### 2. writer.buffer
 
 - **Target:** `writer.Buffer`
-- **Similarity:** 0.17
+- **Similarity:** 0.60
 - **Dependents:** 1
-- **Priority Score:** 1011608.2
-- **Functions:** 12/13 matched (target 20)
-- **Missing functions:** `fmt`
+- **Priority Score:** 1001504.0
+- **Functions:** 12/12 matched (target 23)
+- **Missing functions:** _none_
 - **Types:** 3/3 matched (target 10)
 - **Missing types:** _none_
 
-### 3. fmt.mod
-
-- **Target:** `fmt.Mod [STUB]`
-- **Similarity:** 0.00
-- **Dependents:** 0
-- **Priority Score:** 66410.0
-- **Functions:** 48/54 matched (target 62)
-- **Missing functions:** `default`, `flush`, `write_record`, `write_target`, `write`, `formatter`
-- **Types:** 10/10 matched (target 11)
-- **Missing types:** _none_
-- **Tests:** 13/17 matched
-
-### 4. logger
+### 3. logger
 
 - **Target:** `envlogger.Logger`
-- **Similarity:** 0.38
+- **Similarity:** 0.83
 - **Dependents:** 0
-- **Priority Score:** 17006.2
-- **Functions:** 65/66 matched (target 91)
-- **Missing functions:** `init`
+- **Priority Score:** 5901.7
+- **Functions:** 55/55 matched (target 91)
+- **Missing functions:** _none_
 - **Types:** 4/4 matched (target 8)
 - **Missing types:** _none_
 - **Tests:** 5/5 matched
 
-### 5. writer.mod
-
-- **Target:** `writer.Mod [STUB]`
-- **Similarity:** 0.00
-- **Dependents:** 0
-- **Priority Score:** 11810.0
-- **Functions:** 14/15 matched (target 27)
-- **Missing functions:** `from`
-- **Types:** 3/3 matched (target 5)
-- **Missing types:** _none_
-- **Tests:** 2/2 matched
-
-### 6. fmt.humantime
+### 4. fmt.humantime
 
 - **Target:** `fmt.Humantime`
-- **Similarity:** 0.15
+- **Similarity:** 0.59
 - **Dependents:** 0
-- **Priority Score:** 11108.5
-- **Functions:** 8/9 matched (target 11)
-- **Missing functions:** `fmt`
+- **Priority Score:** 904.1
+- **Functions:** 7/7 matched (target 11)
+- **Missing functions:** _none_
 - **Types:** 2/2 matched (target 3)
 - **Missing types:** _none_
 - **Tests:** 1/1 matched
 
-### 7. fmt.kv
+### 5. fmt.kv
 
 - **Target:** `fmt.Kv`
-- **Similarity:** 0.35
+- **Similarity:** 0.79
 - **Dependents:** 0
-- **Priority Score:** 606.5
+- **Priority Score:** 602.1
 - **Functions:** 4/4 matched (target 7)
 - **Missing functions:** _none_
 - **Types:** 2/2 matched (target 3)
@@ -130,5 +104,12 @@ do not treat them as the next implementation target by default.
 
 | Source | Target | Path |
 |--------|--------|------|
-| `lib` | `envlogger.Lib` | `lib` |
+| `lib` | `envlogger.PipeSink` | `lib` |
+
+### Missing
+
+| Source | Expected target | Deps | Source path | Expected path |
+|--------|-----------------|------|-------------|---------------|
+| `fmt.mod` | `fmt.Mod` | 0 | `fmt/mod.rs` | `fmt/Mod.kt` |
+| `writer.mod` | `writer.Mod` | 0 | `writer/mod.rs` | `writer/Mod.kt` |
 

@@ -1,4 +1,3 @@
-// port-lint: tests fmt/mod.rs
 package io.github.kotlinmania.envlogger.fmt
 
 import io.github.kotlinmania.envlogger.writer.WriteStyle
@@ -50,7 +49,7 @@ private fun kvSource(vararg pairs: Pair<String, UInt>): Source =
         Result.success(Unit)
     }
 
-class ModTest {
+class ConfigurableFormatTest {
     @Test
     fun formatWithHeader() {
         val f = formatter()

@@ -15,6 +15,15 @@
     "todos": true,
     "lint": true
   },
-  "reexport_modules": ["lib.rs", "lib"]
+  "reexport_modules": [
+    "lib",
+    "lib.rs",
+    "fmt.mod",
+    "fmt/mod.rs",
+    "fmt/mod",
+    "writer.mod",
+    "writer/mod.rs",
+    "writer/mod"
+  ]
 }
 
