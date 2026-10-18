@@ -22,9 +22,9 @@ public sealed class Target {
     ) : Target()
 
     /**
-     * String representation of target.
+     * Formats target for display and debug representations.
      */
-    override fun toString(): String =
+    public fun fmt(): String =
         when (this) {
             is Stdout -> "stdout"
             is Stderr -> "stderr"
@@ -32,9 +32,9 @@ public sealed class Target {
         }
 
     /**
-     * Formats target for display and debug representations.
+     * String representation of target.
      */
-    public fun fmt(): String = toString()
+    override fun toString(): String = fmt()
 
     public companion object {
         /** Returns the default [Target], which is [Stderr]. */
