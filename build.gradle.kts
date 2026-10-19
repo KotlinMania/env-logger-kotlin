@@ -22,6 +22,7 @@ import org.jetbrains.kotlin.gradle.targets.js.yarn.YarnRootExtension
 import org.jetbrains.kotlin.gradle.targets.wasm.nodejs.WasmNodeJsEnvSpec
 import org.jetbrains.kotlin.gradle.targets.wasm.yarn.WasmYarnRootEnvSpec
 import java.io.ByteArrayInputStream
+import java.io.ByteArrayOutputStream
 import java.net.URI
 import java.net.http.HttpClient
 import java.net.http.HttpRequest
@@ -158,6 +159,16 @@ configurations.configureEach {
 val browserTestExcludes =
     providers
         .gradleProperty("project.js.browserTestExcludes")
+        .getOrElse("")
+        .split(',')
+        .map { it.trim() }
+        .filter { it.isNotEmpty() }
+
+// Extra Kotlin compiler arguments for this repo, from
+// project.kotlin.freeCompilerArgs as a comma-separated list (empty by default).
+val extraKotlinCompilerArgs =
+    providers
+        .gradleProperty("project.kotlin.freeCompilerArgs")
         .getOrElse("")
         .split(',')
         .map { it.trim() }
@@ -397,15 +408,6 @@ tasks
         dependsOn(ensureAndroidSdk)
     }
 
-// Gap #9b: KGP-generated bridge boilerplate and KotlinCoroutineSupport runtime
-// produce warnings (unchecked casts, unused expressions, opt-in requirements)
-// that cannot be fixed in source — they are regenerated every build.
-tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompilationTask<*>>().configureEach {
-    if (name.startsWith("compileSwiftExport")) {
-        compilerOptions.allWarningsAsErrors.set(false)
-    }
-}
-
 val jvmToolchainVersion = providers.gradleProperty("jvm.toolchain").getOrElse("21").toInt()
 
 // ============================================================================
@@ -424,6 +426,7 @@ kotlin {
     // Default hierarchy plus a named posix group: shared POSIX code for every
     // native target except mingw (Apple, Linux, Android Native) lives in
     // src/posixMain and src/posixTest as real shared source sets.
+    @OptIn(org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi::class)
     applyDefaultHierarchyTemplate {
         common {
             group("native") {
@@ -442,6 +445,7 @@ kotlin {
         allWarningsAsErrors.set(true)
         optIn.addAll(commonOptIns)
         freeCompilerArgs.addAll("-Xexpect-actual-classes", "-Xsuppress-version-warnings")
+        freeCompilerArgs.addAll(extraKotlinCompilerArgs)
     }
 
     val xcf = XCFramework(frameworkName)
@@ -671,8 +675,8 @@ kotlin {
                                 ) -> {
                                 val (appleTriple, sdkName) =
                                     when (konanTargetName) {
-                                        "macos_arm64" -> "arm64-apple-macos14.0" to "macosx"
-                                        "macos_x64" -> "x86_64-apple-macos14.0" to "macosx"
+                                        "macos_arm64" -> "arm64-apple-macos15.0" to "macosx"
+                                        "macos_x64" -> "x86_64-apple-macos15.0" to "macosx"
                                         "ios_arm64" -> "arm64-apple-ios14.0" to "iphoneos"
                                         "ios_simulator_arm64" -> "arm64-apple-ios14.0-simulator" to "iphonesimulator"
                                         "ios_x64" -> "x86_64-apple-ios14.0-simulator" to "iphonesimulator"
@@ -680,7 +684,7 @@ kotlin {
                                         "watchos_simulator_arm64" -> "arm64-apple-watchos7.0-simulator" to "watchsimulator"
                                         "tvos_arm64" -> "arm64-apple-tvos14.0" to "appletvos"
                                         "tvos_simulator_arm64" -> "arm64-apple-tvos14.0-simulator" to "appletvsimulator"
-                                        else -> "arm64-apple-macos14.0" to "macosx"
+                                        else -> "arm64-apple-macos15.0" to "macosx"
                                     }
                                 execOps
                                     .exec {
@@ -1454,62 +1458,6 @@ if (napiFfiEnabled) {
     }
 }
 
-// Propagate JNI and N-API native bindings from composite includedBuilds
-val extraJavaLibPaths = mutableListOf<String>()
-if (jvmFfiEnabled) {
-    extraJavaLibPaths.add(
-        layout.buildDirectory
-            .dir("natives")
-            .get()
-            .asFile.absolutePath,
-    )
-}
-gradle.includedBuilds.forEach { ib ->
-    val ibPropsFile = File(ib.projectDir, "gradle.properties")
-    if (ibPropsFile.exists()) {
-        val ibProps =
-            ibPropsFile
-                .readLines()
-                .map { it.trim() }
-                .filter { it.isNotEmpty() && !it.startsWith("#") && '=' in it }
-                .associate { it.substringBefore('=').trim() to it.substringAfter('=').trim() }
-        val ibFfiRaw = (ibProps["project.ffi.name"] ?: "Ffi").trim()
-        val ibFfiName = ibFfiRaw.replaceFirstChar { it.uppercase() }
-        val ibFfiLower = ibFfiRaw.lowercase()
-        val ibJvmFfi = (ibProps["project.ffi.jvm"] ?: "false").trim().lowercase() == "true"
-        val ibNapiFfi = (ibProps["project.ffi.napi"] ?: "false").trim().lowercase() == "true"
-
-        if (ibJvmFfi) {
-            extraJavaLibPaths.add(File(ib.projectDir, "build/natives").absolutePath)
-            tasks.named<Test>("jvmTest") {
-                dependsOn(ib.task(":compile${ibFfiName}Jni"))
-            }
-        }
-        if (ibNapiFfi) {
-            val copyIbNode =
-                tasks.register<Copy>("copyIncludedNode$ibFfiName") {
-                    dependsOn(ib.task(":buildNode$ibFfiName"))
-                    from(File(ib.projectDir, "native/node-$ibFfiLower"))
-                    into(layout.buildDirectory.dir("js/node_modules/@kotlinmania/$ibFfiLower-native-bindings"))
-                }
-            val copyIbWasmNode =
-                tasks.register<Copy>("copyIncludedWasmNode$ibFfiName") {
-                    dependsOn(ib.task(":buildNode$ibFfiName"))
-                    from(File(ib.projectDir, "native/node-$ibFfiLower"))
-                    into(layout.buildDirectory.dir("wasm/node_modules/@kotlinmania/$ibFfiLower-native-bindings"))
-                }
-            tasks.matching { it.name.startsWith("jsNodeTest") || it.name.startsWith("wasmJsNodeTest") }.configureEach {
-                dependsOn(copyIbNode, copyIbWasmNode)
-            }
-        }
-    }
-}
-if (extraJavaLibPaths.isNotEmpty()) {
-    tasks.named<Test>("jvmTest") {
-        systemProperty("java.library.path", extraJavaLibPaths.joinToString(File.pathSeparator))
-    }
-}
-
 // Test runner for every enabled target. allTests is the KMP aggregate: JVM,
 // js and wasmJs (Node and browser), wasmWasi, and every native test target the
 // host can run (macOS, iOS/tvOS/watchOS simulators here; Linux and Windows on
@@ -1547,10 +1495,26 @@ tasks.matching { it.name.contains("GenerateSPMPackage") }.configureEach {
                             Regex("""(let package = Package\s*\(\s*name:\s*"[^"]*",)"""),
                             "$1\n    platforms: [.macOS(\"15.0\")],",
                         )
-                } else if (text.contains(".macOS(.v15)") || text.contains(".macOS(.v14)")) {
-                    text = text.replace(".macOS(.v15)", ".macOS(\"15.0\")").replace(".macOS(.v14)", ".macOS(\"15.0\")")
+                } else {
+                    text =
+                        text.replace(
+                            Regex("""\.macOS\((?:\.v\d+|"[0-9.]+")\)"""),
+                            ".macOS(\"15.0\")",
+                        )
                 }
                 file.writeText(text)
+            }
+            // Swift Export spells Foundation's stream classes by their Objective-C names, which
+            // Swift rejects ("'NSInputStream' has been renamed to 'InputStream'").
+            spmDir.walkTopDown().filter { it.isFile && it.extension == "swift" }.forEach { file ->
+                val text = file.readText()
+                val renamed =
+                    text
+                        .replace("Foundation.NSInputStream", "Foundation.InputStream")
+                        .replace("Foundation.NSOutputStream", "Foundation.OutputStream")
+                if (renamed != text) {
+                    file.writeText(renamed)
+                }
             }
             spmDir.walkTopDown().filter { it.name == "OrgJetbrainsKotlinxKotlinxSerializationCore.swift" }.forEach { file ->
                 val text = file.readText()
@@ -1620,11 +1584,59 @@ tasks.register("swiftExportSmokeTest") {
                 commandLine("swift", "package", "reset")
             }.assertNormalExitValue()
 
-        execOperations
-            .exec {
+        // Xcode toolchains find Testing.framework on their own. A Command Line Tools
+        // toolchain builds the harness but silently runs zero Swift Testing tests unless
+        // its own Frameworks directory is on the search and runtime paths. Never point an
+        // Xcode toolchain at the Command Line Tools copy: its @Suite macro would not match.
+        val developerDir =
+            ByteArrayOutputStream().use { out ->
+                execOperations
+                    .exec {
+                        commandLine("xcode-select", "-p")
+                        standardOutput = out
+                    }.assertNormalExitValue()
+                out.toString().trim()
+            }
+        val swiftTestCommand = mutableListOf("swift", "test")
+        if (developerDir.endsWith("CommandLineTools")) {
+            val frameworks = "$developerDir/Library/Developer/Frameworks"
+            swiftTestCommand +=
+                listOf(
+                    "-Xswiftc",
+                    "-F",
+                    "-Xswiftc",
+                    frameworks,
+                    "-Xlinker",
+                    "-F",
+                    "-Xlinker",
+                    frameworks,
+                    "-Xlinker",
+                    "-rpath",
+                    "-Xlinker",
+                    frameworks,
+                    "-Xlinker",
+                    "-rpath",
+                    "-Xlinker",
+                    "$developerDir/Library/Developer/usr/lib",
+                )
+        }
+        val swiftTestOutput = ByteArrayOutputStream()
+        val swiftTestResult =
+            execOperations.exec {
                 workingDir = layout.projectDirectory.dir("swift-test-harness").asFile
-                commandLine("swift", "test")
-            }.assertNormalExitValue()
+                commandLine(swiftTestCommand)
+                standardOutput = swiftTestOutput
+                errorOutput = swiftTestOutput
+                isIgnoreExitValue = true
+            }
+        val swiftTestLog = swiftTestOutput.toString()
+        println(swiftTestLog)
+        swiftTestResult.assertNormalExitValue()
+        val ranSwiftTesting = swiftTestLog.contains(Regex("""Test run with [1-9]\d* tests?"""))
+        val ranXCTest = swiftTestLog.contains(Regex("""Executed [1-9]\d* tests?, with 0 failures"""))
+        if (!ranSwiftTesting && !ranXCTest) {
+            throw GradleException("swift test ran no tests (toolchain: $developerDir)")
+        }
     }
 }
 
@@ -1715,4 +1727,49 @@ tasks.register("testClasses") {
         "wasmJsTestClasses",
         "wasmWasiTestClasses",
     )
+}
+
+// Kotlin/Wasm's generated WASI test driver preopens no directories (KT-65179), so
+// filesystem tests cannot reach any path. project.wasmWasi.testPreopens lists guest
+// directories to map onto fresh host temporary directories for wasmWasiNodeTest.
+val wasmWasiTestPreopens =
+    providers
+        .gradleProperty("project.wasmWasi.testPreopens")
+        .getOrElse("")
+        .split(',')
+        .map { it.trim() }
+        .filter { it.isNotEmpty() }
+
+if (wasmWasiTestPreopens.isNotEmpty()) {
+    tasks.named("wasmWasiNodeTest") {
+        val driverDir = layout.buildDirectory.dir("compileSync/wasmWasi/test/testDevelopmentExecutable/kotlin")
+        val hostRoot = layout.buildDirectory.dir("tmp/wasmWasiTestPreopens")
+        doFirst {
+            val driver =
+                driverDir
+                    .get()
+                    .asFile
+                    .listFiles { file -> file.name.endsWith("-test.mjs") }
+                    ?.singleOrNull()
+                    ?: throw GradleException("wasmWasi test driver not found in ${driverDir.get().asFile}")
+            val root = hostRoot.get().asFile
+            root.deleteRecursively()
+            val mappings =
+                wasmWasiTestPreopens.mapIndexed { index, guest ->
+                    val host = root.resolve("preopen-$index").apply { mkdirs() }
+                    val hostPath = host.absolutePath.replace("\\", "\\\\")
+                    "'$guest': '$hostPath'"
+                }
+            val text = driver.readText()
+            if (!text.contains("preopens:")) {
+                val patched =
+                    text.replaceFirst(
+                        Regex("""new WASI\(\{"""),
+                        "new WASI({ preopens: { ${mappings.joinToString(", ")} },",
+                    )
+                if (patched == text) throw GradleException("Could not add preopens to ${driver.name}")
+                driver.writeText(patched)
+            }
+        }
+    }
 }
