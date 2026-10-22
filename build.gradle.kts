@@ -45,6 +45,8 @@ plugins {
     signing
 }
 
+apply(from = "gradle/swift-export-compat.gradle.kts")
+
 group = providers.gradleProperty("project.group").getOrElse("io.github.kotlinmania")
 version = providers.gradleProperty("project.version").getOrElse("0.1.0-SNAPSHOT")
 val frameworkName = providers.gradleProperty("project.frameworkName").getOrElse("Unnamed")
@@ -855,6 +857,8 @@ kotlin {
         }
         commonMain.dependencies {
             implementation(commonMainDependencyBundle)
+            api(libs.log)
+            api(libs.serde.core)
         }
         commonTest.dependencies {
             implementation(kotlin("test"))
