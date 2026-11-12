@@ -32,7 +32,7 @@ private fun writeTarget(target: String, fmt: ConfigurableFormatWriter): String =
             .args(Arguments("log\nmessage", emptyList()))
             .level(Level.Info)
             .file("test.rs")
-            .line(144)
+            .line(144u)
             .modulePath("test::path")
             .target(target)
             .build(),
@@ -375,7 +375,7 @@ class ConfigurableFormatTest {
                 .modulePath("test::path")
                 .target("target")
                 .file("test.rs")
-                .line(42)
+                .line(42u)
                 .keyValues(kvs)
                 .build()
 
