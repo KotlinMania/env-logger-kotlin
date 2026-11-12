@@ -13,6 +13,8 @@ anstyle = "0.1.5"
 log = "0.1.5"
 serdeCore = "0.1.11"
 
+androidxTestRunner = "1.7.0"
+
 [plugins]
 android-kotlin-multiplatform-library = { id = "com.android.kotlin.multiplatform.library", version.ref = "androidKmp" }
 kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
@@ -33,6 +35,8 @@ kotlinx-benchmark-runtime = { module = "org.jetbrains.kotlinx:kotlinx-benchmark-
 anstyle = { module = "io.github.kotlinmania:anstyle-kotlin", version.ref = "anstyle" }
 log = { module = "io.github.kotlinmania:log-kotlin", version.ref = "log" }
 serde-core = { module = "io.github.kotlinmania:serde-core", version.ref = "serdeCore" }
+
+androidx-test-runner = { module = "androidx.test:runner", version.ref = "androidxTestRunner" }
 
 [bundles]
 env-logger-commonMain = [
