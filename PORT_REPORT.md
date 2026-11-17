@@ -1,4 +1,4 @@
-=== Deep Analysis: tmp/env_logger/src (rust) -> src/commonMain/kotlin (kotlin) ===
+=== Deep Analysis: tmp/env_logger/src (rust) -> src/common/commonMain/kotlin (kotlin) ===
 
 Scanning source codebase (rust)...
 Codebase: tmp/env_logger/src (rust)
@@ -7,7 +7,7 @@ Codebase: tmp/env_logger/src (rust)
   Most depended: writer.target (2 dependents)
 
 Scanning target codebase (kotlin)...
-Codebase: src/commonMain/kotlin (kotlin)
+Codebase: src/common/commonMain/kotlin (kotlin)
   Files: 14
   Total imports: 58
   Most depended: envlogger.PipeSink (5 dependents)
@@ -18,7 +18,7 @@ Computing AST similarities...
 === Codebase Comparison Report ===
 
 Source: tmp/env_logger/src (8 files)
-Target: src/commonMain/kotlin (14 files)
+Target: src/common/commonMain/kotlin (14 files)
 Scoring invariant: FnSim is required function body/parameter similarity. Class/type and symbol parity are reported beside it; whole-file shape is diagnostic only.
 
 Matched:   8 files

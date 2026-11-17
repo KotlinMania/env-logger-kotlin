@@ -5,13 +5,15 @@ Based on AST analysis, here are the concrete next steps.
 ## Summary
 
 - **Files Present:** 6/8 (75.0%)
-- **Function parity:** 79/79 matched (target 140) — 100.0%
-- **Class/type parity:** 12/12 matched (target 30) — 100.0%
-- **Combined symbol parity:** 91/91 matched (target 170) — 100.0%
-- **Average inline-code cosine:** 0.72 (function body across 6 matched files)
+- **Function parity:** 85/93 matched (target 118) — 91.4%
+- **Class/type parity:** 12/12 matched (target 23) — 100.0%
+- **Combined symbol parity:** 97/105 matched (target 141) — 92.4%
+- **Average inline-code cosine:** 0.34 (function body across 6 matched files)
 - **Average documentation cosine:** 0.71 (doc text across 6 matched files)
 - **Cheat-zeroed Files:** 0
-- **Critical Issues:** 2 files with <0.60 function similarity
+- **Critical Issues:** 5 files with <0.60 function similarity
+- **Needs Review:** 0 files with 0.60-0.84 function similarity
+- **Excellent:** 1 files with >=0.85 function similarity
 
 ## Priority 1: Fix Incomplete High-Dependency Files
 
@@ -30,58 +32,58 @@ Every matched file is listed below with function and type symbol parity.
 ### 1. writer.target
 
 - **Target:** `writer.Target`
-- **Similarity:** 0.50
+- **Similarity:** 0.04
 - **Dependents:** 2
-- **Priority Score:** 2000205.0
-- **Functions:** 1/1 matched (target 8)
+- **Priority Score:** 2000209.6
+- **Functions:** 1/1 matched (target 3)
 - **Missing functions:** _none_
-- **Types:** 1/1 matched (target 6)
+- **Types:** 1/1 matched (target 4)
 - **Missing types:** _none_
 
 ### 2. writer.buffer
 
 - **Target:** `writer.Buffer`
-- **Similarity:** 0.60
+- **Similarity:** 0.18
 - **Dependents:** 1
-- **Priority Score:** 1001504.0
-- **Functions:** 12/12 matched (target 23)
+- **Priority Score:** 1001608.2
+- **Functions:** 13/13 matched (target 18)
 - **Missing functions:** _none_
-- **Types:** 3/3 matched (target 10)
+- **Types:** 3/3 matched (target 8)
 - **Missing types:** _none_
 
 ### 3. logger
 
-- **Target:** `envlogger.Logger`
-- **Similarity:** 0.83
+- **Target:** `Logger`
+- **Similarity:** 0.33
 - **Dependents:** 0
-- **Priority Score:** 5901.7
-- **Functions:** 55/55 matched (target 91)
-- **Missing functions:** _none_
-- **Types:** 4/4 matched (target 8)
+- **Priority Score:** 67006.7
+- **Functions:** 60/66 matched (target 83)
+- **Missing functions:** `init`, `env_get_filter_reads_from_var_if_set`, `env_get_filter_reads_from_default_if_var_not_set`, `env_get_write_style_reads_from_var_if_set`, `env_get_write_style_reads_from_default_if_var_not_set`, `builder_parse_env_overrides_existing_filters`
+- **Types:** 4/4 matched (target 7)
 - **Missing types:** _none_
-- **Tests:** 5/5 matched
+- **Tests:** 0/5 matched
 
 ### 4. fmt.humantime
 
 - **Target:** `fmt.Humantime`
-- **Similarity:** 0.59
+- **Similarity:** 0.14
 - **Dependents:** 0
-- **Priority Score:** 904.1
-- **Functions:** 7/7 matched (target 11)
-- **Missing functions:** _none_
-- **Types:** 2/2 matched (target 3)
+- **Priority Score:** 21108.6
+- **Functions:** 7/9 matched (target 10)
+- **Missing functions:** `fmt`, `test_display_timestamp`
+- **Types:** 2/2 matched
 - **Missing types:** _none_
-- **Tests:** 1/1 matched
+- **Tests:** 0/1 matched
 
 ### 5. fmt.kv
 
 - **Target:** `fmt.Kv`
-- **Similarity:** 0.79
+- **Similarity:** 0.35
 - **Dependents:** 0
-- **Priority Score:** 602.1
-- **Functions:** 4/4 matched (target 7)
+- **Priority Score:** 606.5
+- **Functions:** 4/4 matched
 - **Missing functions:** _none_
-- **Types:** 2/2 matched (target 3)
+- **Types:** 2/2 matched
 - **Missing types:** _none_
 
 ## Success Criteria
@@ -104,7 +106,7 @@ do not treat them as the next implementation target by default.
 
 | Source | Target | Path |
 |--------|--------|------|
-| `lib` | `envlogger.PipeSink` | `lib` |
+| `lib` | `PipeSink` | `lib` |
 
 ### Missing
 
