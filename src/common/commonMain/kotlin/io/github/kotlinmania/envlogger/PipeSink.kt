@@ -1,4 +1,4 @@
-// port-lint: source lib.rs
+// Kotlin Multiplatform byte-stream sink interface for writer/target.rs (Pipe(Box<dyn std::io::Write + Send + Sync>)).
 package io.github.kotlinmania.envlogger
 
 /**

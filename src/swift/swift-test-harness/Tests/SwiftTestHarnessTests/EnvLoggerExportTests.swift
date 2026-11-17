@@ -31,7 +31,47 @@ import EnvLogger
 @Suite
 struct EnvLoggerExportTests {
     @Test
-    func swiftModuleLoads() {
-        #expect(true, "EnvLogger swift module imported cleanly")
+    func envAndConstantsExposeDefaults() {
+        #expect(DEFAULT_FILTER_ENV == "RUST_LOG")
+        #expect(DEFAULT_WRITE_STYLE_ENV == "RUST_LOG_STYLE")
+
+        let env = Env.Companion.shared.default()
+            .filterOr(filterEnv: "CUSTOM_LOG", default: "info")
+            .writeStyleOr(writeStyleEnv: "CUSTOM_STYLE", default: "never")
+        #expect(!env.toString().isEmpty)
+    }
+
+    @Test
+    func builderConfiguresAndBuildsLogger() {
+        let built = builder()
+            .defaultFormat()
+            .parseFilters(filters: "warn,env_logger_swift=debug")
+            .parseWriteStyle(writeStyle: "never")
+            .writeStyle(writeStyle: writer.WriteStyle.Always)
+            .formatTimestamp(timestamp: fmt.TimestampPrecision.Millis)
+            .formatFile(write: true)
+            .formatIndent(indent: 2)
+            .isTest(isTest: true)
+            .target(target: writer.Target.Stderr.shared)
+        #expect(!built.fmt().isEmpty)
+
+        let logger = built.build()
+        #expect(!logger.fmt().isEmpty)
+        logger.flush()
+    }
+
+    @Test
+    func writerEnumsAndTargetsRoundTrip() {
+        #expect(writer.WriteStyle.allCases.count == 3)
+        #expect(writer.WriteStyle(rawValue: writer.WriteStyle.Auto.rawValue) == .Auto)
+        #expect(fmt.TimestampPrecision.allCases.count == 4)
+        #expect(fmt.TimestampPrecision.Companion.shared.default() == .Seconds)
+
+        switch writer.Target.Stderr.shared.sealedType() {
+        case .stderr:
+            break
+        case .pipe, .stdout:
+            Issue.record("Expected Stderr target")
+        }
     }
 }
